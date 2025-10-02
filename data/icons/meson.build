@@ -1,4 +1,4 @@
-application_id = 'net.codelogistics.sentence'
+application_id = 'net.codelogistics.letters'
 
 scalable_dir = 'hicolor' / 'scalable' / 'apps'
 install_data(

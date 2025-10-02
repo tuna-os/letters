@@ -71,6 +71,7 @@ class LettersWindow(Adw.ApplicationWindow):
         application.create_action("open", self.open, ["<ctrl>o"])
         application.create_action("save", self.save, ["<ctrl>s"])
         application.create_action("save_as", self.save_as, ["<ctrl><shift>s"])
+        application.create_action("print", self.print, ["<ctrl>p"])
         application.create_action("undo", lambda x, y: self.run_js(None, "document.execCommand('undo')"), ["<ctrl>z"])
         application.create_action("redo", lambda x, y: self.run_js(None, "document.execCommand('redo')"), ["<ctrl>y"])
         application.create_action("underline", lambda x, y: self.run_js(None, "formatting.underline()"), ["<ctrl>u"])
@@ -237,10 +238,9 @@ class LettersWindow(Adw.ApplicationWindow):
     def new_webview(self, file_path = None):
         # Returns a WebKit.WebView() with style change handlers registered
         webview = WebKit.WebView()
-        webview.set_editable(True)
 
-        #settings = webview.get_settings()
-        #settings.set_enable_developer_extras(True)
+        settings = webview.get_settings()
+        settings.set_enable_developer_extras(True)
 
         ucm = webview.get_user_content_manager()
         ucm.register_script_message_handler("styleChange")
@@ -257,7 +257,7 @@ class LettersWindow(Adw.ApplicationWindow):
             webview.file_path = file_path
             if not file_path.endswith(('.txt', '.html')):
                 try:
-                    content = pypandoc.convert_file(file_path, 'html', extra_args=['--embed-resources'])
+                    content = pypandoc.convert_file(file_path, 'html', extra_args=['--embed-resources', '--sandbox'])
                 except Exception as e:
                     content = f"<p>Error loading file: {e}</p>"
             else:
@@ -268,7 +268,6 @@ class LettersWindow(Adw.ApplicationWindow):
             content = '<!DOCTYPE html><html><head></head><body><p></p></body></html>'
 
         webview.load_html(content)
-
         return webview
 
     def run_js(self, webview, code):
@@ -322,7 +321,7 @@ class LettersWindow(Adw.ApplicationWindow):
             filters_list.append(save_filter)
         save_dialog.set_filters(filters_list)
         if webview.file_path:
-            save_dialog.set_initial_name(webview.file_path)
+            save_dialog.set_initial_name(os.path.basename(webview.file_path))
         else:
             save_dialog.set_initial_name("Untitled Document.odt")
         save_dialog.save(self.get_application().get_active_window(), None, save_callback)
@@ -336,7 +335,7 @@ class LettersWindow(Adw.ApplicationWindow):
                 if ext not in ['odt', 'docx', 'txt', 'md', 'html']:
                     ext = "odt"
                 try:
-                    pypandoc.convert_text(content, ext, format='html', outputfile=file_path, extra_args=['--embed-resources'])
+                    pypandoc.convert_text(content, ext, format='html', outputfile=file_path, extra_args=['--embed-resources', '--sandbox'])
 
                     page.set_needs_attention(False)
                     page.set_title(os.path.basename(file_path))
@@ -354,8 +353,14 @@ class LettersWindow(Adw.ApplicationWindow):
 
         webview.evaluate_javascript("document.documentElement.outerHTML", -1, None, None, None, output_callback)
 
+    def print(self, action, data = None):
+        if self.tabview.get_selected_page():
+            self.run_js(self.tabview.get_selected_page().get_child(), "printPage()")
+
     def load_changed(self, webview, load_event):
         if load_event == 3:
+            self.run_js(webview, "document.body.contentEditable = true;")
+
             from pathlib import Path
             base_dir = Path(__file__).parent
             js_path = base_dir / "editor.js"

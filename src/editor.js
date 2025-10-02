@@ -260,4 +260,22 @@ function bootstrapExistingImages() {
 
 bootstrapExistingImages();
 
+/* -------------------- Page Printing --------------------*/
+function printPage() {
+  if (!editor) {
+    window.print();
+    return;
+  }
 
+  // 1. Disable editing to hide the caret and focus styles
+  editor.setAttribute('contenteditable', 'false');
+
+  // 2. Trigger the print dialog
+  window.print();
+
+  // 3. Use a timeout to wait a very short period, then re-enable editing
+  // This allows the browser time to queue the print job before changing the DOM.
+  setTimeout(() => {
+    editor.setAttribute('contenteditable', 'true');
+  }, 500); // 500ms should be safe
+}

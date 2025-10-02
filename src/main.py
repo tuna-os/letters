@@ -51,12 +51,15 @@ class LettersApplication(Adw.Application):
 
     def on_about_action(self, *args):
         """Callback for the app.about action."""
-        about = Adw.AboutDialog(application_name='letters',
+        about = Adw.AboutDialog(application_name=_('Letters'),
                                 application_icon='net.codelogistics.letters',
                                 developer_name='Satvik Patwardhan',
                                 version='0.1.0',
                                 developers=['Satvik Patwardhan'],
-                                copyright='© 2025 Satvik Patwardhan')
+                                copyright='© 2025 Satvik Patwardhan',
+                                license_type=Gtk.License.GPL_3_0,
+                                issue_url="https://codeberg.org/eyekay/letters/issues",
+                                website="https://codeberg.org/eyekay/letters")
         # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
         about.set_translator_credits(_('translator-credits'))
         about.present(self.props.active_window)

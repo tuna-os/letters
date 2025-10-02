@@ -5,11 +5,11 @@
     "sdk" : "org.gnome.Sdk",
     "command" : "letters",
     "finish-args" : [
-        "--share=network",
         "--share=ipc",
         "--socket=fallback-x11",
         "--device=dri",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--metadata=X-Flatpak-MimeType=text/plain;application/json;image/png;"
     ],
     "cleanup" : [
         "/include",
