@@ -25,15 +25,18 @@ gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio, Adw
 from .window import LettersWindow
-
+import os, sys
 
 class LettersApplication(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
         super().__init__(application_id='net.codelogistics.letters',
-                         flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
+                         flags=Gio.ApplicationFlags.HANDLES_OPEN,
                          resource_base_path='/net/codelogistics/letters')
+
+        print(sys.argv)
+
         self.create_action('quit', self.close_windows, ['<primary>q'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)

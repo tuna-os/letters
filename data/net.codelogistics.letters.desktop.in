@@ -1,10 +1,10 @@
 [Desktop Entry]
-Name=letters
+Name=Letters
 Exec=letters %u
 Icon=net.codelogistics.letters
 Terminal=false
 Type=Application
-Categories=Accessories;Office;
+Categories=X-Accessories;X-Office;
 Keywords=GTK;
 StartupNotify=true
 DBusActivatable=true

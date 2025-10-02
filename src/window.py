@@ -51,10 +51,6 @@ class LettersWindow(Adw.ApplicationWindow):
 
         self.connect("close-request", self.close_window)
 
-        self.toolbar.set_visible(False)
-        self.stack.set_visible_child(self.statuspage)
-        self.tbview.set_top_bar_style(Adw.ToolbarStyle.FLAT)
-
         self.add_button.connect("clicked", self.new_file)
         self.tabview.connect("close-page", self.page_closing)
         self.tabview.connect("notify::selected-page", self.update_title)
@@ -68,6 +64,8 @@ class LettersWindow(Adw.ApplicationWindow):
         self.link_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.createLink()"))
         self.image_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "insertImage()"))
         self.styles_dropdown.connect("notify::selected", lambda dropdown, _: self.get_application().get_active_window().on_style_dropdown_changed(None, dropdown))
+
+        self.new_file()
 
     # ---------------------------------- GTK/ FRONTEND RELATED FUNCTIONS ---------------------------
 
@@ -168,9 +166,11 @@ class LettersWindow(Adw.ApplicationWindow):
                             self.stack.set_visible_child(self.statuspage)
                             self.tbview.set_top_bar_style(Adw.ToolbarStyle.FLAT)
                             self.toolbar.set_visible(False)
+                    self.update_title()
                 except Exception as e:
                     print(e)
                     self.tabview.close_page_finish(page, False)
+
             confirm_dialog = Adw.AlertDialog()
             confirm_dialog.set_heading(_("Save document?"))
             confirm_dialog.set_body(page.get_title() + _("\n This document has not been saved. Changes which are not saved will be permanently lost."))
