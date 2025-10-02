@@ -22,7 +22,7 @@ gi.require_version('WebKit', '6.0')
 from gi.repository import Gio, Adw, Gtk, WebKit
 
 import os
-import pypandoc
+import pypandoc, weasyprint
 
 @Gtk.Template(resource_path='/net/codelogistics/letters/window.ui')
 class LettersWindow(Adw.ApplicationWindow):
@@ -44,6 +44,8 @@ class LettersWindow(Adw.ApplicationWindow):
     image_button = Gtk.Template.Child()
     styles_dropdown = Gtk.Template.Child()
 
+    FORCE_CLOSE = False
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -56,26 +58,16 @@ class LettersWindow(Adw.ApplicationWindow):
         self.add_button.connect("clicked", self.new_file)
         self.tabview.connect("close-page", self.page_closing)
         self.tabview.connect("notify::selected-page", self.update_title)
+        self.tabview.connect("create-window", self.create_window)
+        self.tabview.connect("page-attached", self.new_page)
 
-        self.bold_button.connect('clicked', lambda btn: self.run_js(None, "formatting.bold()"))
-        self.italic_button.connect('clicked', lambda btn: self.run_js(None, "formatting.italic()"))
-        self.underline_button.connect('clicked', lambda btn: self.run_js(None, "formatting.underline()"))
-        self.list_button.connect('clicked', lambda btn: self.run_js(None, "document.execCommand('insertUnorderedList')"))
-        self.link_button.connect('clicked', lambda btn: self.run_js(None, "formatting.createLink()"))
-        self.image_button.connect('clicked', lambda btn: self.run_js(None, "insertImage()"))
-        self.styles_dropdown.connect("notify::selected", lambda dropdown, _: self.on_style_dropdown_changed(None, dropdown))
-
-        application = self.get_application()
-        application.create_action("new", lambda x, y: self.new_file(None), ["<ctrl>n"])
-        application.create_action("close", self.close_page, ["<ctrl>w"])
-        application.create_action("open", self.open, ["<ctrl>o"])
-        application.create_action("save", self.save, ["<ctrl>s"])
-        application.create_action("save_as", self.save_as, ["<ctrl><shift>s"])
-        application.create_action("print", self.print, ["<ctrl>p"])
-        application.create_action("undo", lambda x, y: self.run_js(None, "document.execCommand('undo')"), ["<ctrl>z"])
-        application.create_action("redo", lambda x, y: self.run_js(None, "document.execCommand('redo')"), ["<ctrl>y"])
-        application.create_action("underline", lambda x, y: self.run_js(None, "formatting.underline()"), ["<ctrl>u"])
-        application.create_action("insertlink", lambda x, y: self.run_js(None, "formatting.createLink()"), ["<ctrl>k"])
+        self.bold_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.bold()"))
+        self.italic_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.italic()"))
+        self.underline_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.underline()"))
+        self.list_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "document.execCommand('insertUnorderedList')"))
+        self.link_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.createLink()"))
+        self.image_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "insertImage()"))
+        self.styles_dropdown.connect("notify::selected", lambda dropdown, _: self.get_application().get_active_window().on_style_dropdown_changed(None, dropdown))
 
     # ---------------------------------- GTK/ FRONTEND RELATED FUNCTIONS ---------------------------
 
@@ -120,7 +112,12 @@ class LettersWindow(Adw.ApplicationWindow):
             try:
                 file = open_dialog.open_finish(result)
                 if file.get_basename().rpartition(".")[2] not in ["docx", "odt", "txt", "md", "html"]:
-                    print(_("Unsupported file format"))
+                    dialog = Adw.AlertDialog()
+                    dialog.set_heading(_("Unsupported File Format"))
+                    dialog.set_body(_("The file you selected could not be opened as it is in an unrecognised format."))
+                    dialog.add_response("ok", _("OK"))
+                    dialog.set_default_response("ok")
+                    dialog.choose(self)
                     return
                 else:
                     webview = self.new_webview(file.get_path())
@@ -139,11 +136,20 @@ class LettersWindow(Adw.ApplicationWindow):
         open_dialog.open(self, None, open_callback, None)
         self.update_title()
 
+    def new_page(self, tabview, pos, data=None):
+        self.update_title()
+        self.toolbar.set_visible(True)
+        self.stack.set_visible_child(self.tabview)
+        self.tbview.set_top_bar_style(Adw.ToolbarStyle.RAISED)
+
     def close_page(self, action, data = None):
         if self.tabview.get_n_pages():
             self.tabview.close_page(self.tabview.get_selected_page())
-        else:
+        elif self.toolbar.get_visible(): # a tab was just closed
             self.toolbar.set_visible(False)
+        else:
+            self.get_application().remove_window(self)
+            self.close()
 
     def page_closing(self, view, page, data = None):
         if page.get_needs_attention(): # using get_needs_attention as a way to check save state
@@ -184,7 +190,14 @@ class LettersWindow(Adw.ApplicationWindow):
                 self.toolbar.set_visible(False)
                 self.tbview.set_top_bar_style(Adw.ToolbarStyle.FLAT)
 
+    def create_window(self, tabview=None):
+        new_window = LettersWindow(application = self.get_application())
+        new_window.present()
+        return new_window.tabview
+
     def close_window(self, window):
+        if self.FORCE_CLOSE:
+            return False
         dirty_pages = [
             self.tabview.get_nth_page(i)
             for i in range(self.tabview.get_n_pages())
@@ -214,7 +227,8 @@ class LettersWindow(Adw.ApplicationWindow):
                     return
 
                 if resp == "discard":
-                    self.destroy()
+                    self.FORCE_CLOSE = True
+                    self.close()
                     return
 
             except Exception as e:
@@ -246,9 +260,9 @@ class LettersWindow(Adw.ApplicationWindow):
         ucm.register_script_message_handler("styleChange")
         ucm.register_script_message_handler("inlineStyleChange")
         ucm.register_script_message_handler("contentChanged")
-        ucm.connect("script-message-received::styleChange", self.on_style_change_from_js)
-        ucm.connect("script-message-received::inlineStyleChange", self.on_inline_style_change_from_js)
-        ucm.connect("script-message-received::contentChanged", self.on_content_changed, webview)
+        ucm.connect("script-message-received::styleChange", lambda ucm, msg: self.get_application().get_active_window().on_style_change_from_js(ucm, msg))
+        ucm.connect("script-message-received::inlineStyleChange", lambda ucm, msg: self.get_application().get_active_window().on_inline_style_change_from_js(ucm, msg))
+        ucm.connect("script-message-received::contentChanged", lambda ucm, msg: self.get_application().get_active_window().on_content_changed(ucm, msg, webview))
 
         webview.connect("context-menu", self.on_context_menu)
         webview.connect('load-changed', self.load_changed)
@@ -356,6 +370,51 @@ class LettersWindow(Adw.ApplicationWindow):
     def print(self, action, data = None):
         if self.tabview.get_selected_page():
             self.run_js(self.tabview.get_selected_page().get_child(), "printPage()")
+
+    def export(self, action, data = None):
+        page = self.tabview.get_selected_page()
+        if not page:
+            return
+        webview = page.get_child()
+        def save_callback(dialog, result):
+            try:
+                file = save_dialog.save_finish(result)
+                self.export_out(webview, file.get_path())
+            except Exception as e:
+                print(e)
+
+        save_dialog = Gtk.FileDialog()
+        filters_list = Gio.ListStore()
+        save_filter = Gtk.FileFilter()
+        save_filter.add_suffix('pdf')
+        filters_list.append(save_filter)
+        save_dialog.set_filters(filters_list)
+        if webview.file_path:
+            save_dialog.set_initial_name(os.path.basename(webview.file_path))
+        else:
+            save_dialog.set_initial_name("Untitled Document.pdf")
+        save_dialog.save(self.get_application().get_active_window(), None, save_callback)
+
+    def export_out(self, webview, file_path):
+        def output_callback(webview, result, data=None):
+            page = self.tabview.get_page(webview)
+            try:
+                content = webview.evaluate_javascript_finish(result).to_string()
+                from pathlib import Path
+                base_dir = Path(__file__).parent
+                with open(base_dir / "styles.css", "r") as f:
+                    css = f.read()
+                settings = Gtk.Settings.get_default()
+                font_css = ":root {color-scheme: light dark} body {font-family: \"" + settings.get_property('gtk-font-name').rstrip(' 0123456789') + "\"}"
+                try:
+                    weasyprint.HTML(string=content).write_pdf(file_path, stylesheets=[weasyprint.CSS(string=css), weasyprint.CSS(string=font_css)])
+
+                except Exception as e:
+                    print(_("Error exporting file: "), e)
+            except Exception as e:
+                print(_("Error exporting file: "), e)
+
+        webview.evaluate_javascript("document.documentElement.outerHTML", -1, None, None, None, output_callback)
 
     def load_changed(self, webview, load_event):
         if load_event == 3:

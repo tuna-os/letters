@@ -8,6 +8,8 @@
 
 Letters is a modern, minimalist word processor for the GNOME desktop, with support for reading and writing DOCX, ODT, MD and HTML, using the [pandoc](https://pandoc.org) library.
 
+It can also export your documents to PDF using [weasyprint](https://weasyprint.org/).
+
 [![Get it on Flathub](https://flathub.org/api/badge?locale=en)](https://flathub.org/apps/net.codelogistics.letters/)
 
 ## Building
@@ -24,4 +26,4 @@ This program is licensed under the GNU General Public License, version 3.0 or la
 
 ## Credits
 
-Made with Gtk 4, WebKitGTK, libadwaita, pandoc, blueprint and Flatpak.
+Made with Gtk 4, WebKitGTK, libadwaita, pypandoc, blueprint, weasyprint and Flatpak.

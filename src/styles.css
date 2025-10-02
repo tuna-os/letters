@@ -14,27 +14,3 @@
   height: 100%;
   object-fit: contain;
 }
-
-.image-wrapper.selected { outline: 2px solid rgba(0,128,255,.6); }
-
-.image-wrapper .handle {
-  position: absolute;
-  width: 10px; height: 10px;
-  background: #fff;
-  border: 2px solid #0078ff;
-  border-radius: 50%;
-  box-sizing: border-box;
-  display: none;
-}
-.image-wrapper.selected .handle { display: block; }
-
-/* 8 handles like Word */
-.handle.tl { top:-6px; left:-6px;  cursor:nwse-resize; }
-.handle.tm { top:-6px; left:50%; transform:translateX(-50%); cursor:ns-resize; }
-.handle.tr { top:-6px; right:-6px; cursor:nesw-resize; }
-.handle.mr { right:-6px; top:50%; transform:translateY(-50%); cursor:ew-resize; }
-.handle.br { bottom:-6px; right:-6px; cursor:nwse-resize; }
-.handle.bm { bottom:-6px; left:50%; transform:translateX(-50%); cursor:ns-resize; }
-.handle.bl { bottom:-6px; left:-6px; cursor:nesw-resize; }
-.handle.ml { left:-6px; top:50%; transform:translateY(-50%); cursor:ew-resize; }
-

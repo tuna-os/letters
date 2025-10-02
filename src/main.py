@@ -38,6 +38,19 @@ class LettersApplication(Adw.Application):
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
 
+        self.create_action("new_window", lambda x,y: self.get_active_window().create_window(), ["<ctrl>n"])
+        self.create_action("new", lambda x, y: self.get_active_window().new_file(None), ["<ctrl>t"])
+        self.create_action("close", lambda x, y: self.get_active_window().close_page(x,y), ["<ctrl>w"])
+        self.create_action("open", lambda x, y: self.get_active_window().open(x,y), ["<ctrl>o"])
+        self.create_action("save", lambda x, y: self.get_active_window().save(x,y), ["<ctrl>s"])
+        self.create_action("save_as", lambda x, y: self.get_active_window().save_as(x,y), ["<ctrl><shift>s"])
+        self.create_action("print", lambda x, y: self.get_active_window().print(x,y), ["<ctrl>p"])
+        self.create_action("export", lambda x, y: self.get_active_window().export(x,y))
+        self.create_action("undo", lambda x, y: self.get_active_window().run_js(None, "document.execCommand('undo')"), ["<ctrl>z"])
+        self.create_action("redo", lambda x, y: self.get_active_window().run_js(None, "document.execCommand('redo')"), ["<ctrl>y"])
+        self.create_action("underline", lambda x, y: self.get_active_window().run_js(None, "formatting.underline()"), ["<ctrl>u"])
+        self.create_action("insertlink", lambda x, y: self.get_active_window().run_js(None, "formatting.createLink()"), ["<ctrl>k"])
+
     def do_activate(self):
         """Called when the application is activated.
 
