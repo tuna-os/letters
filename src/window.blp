@@ -56,19 +56,17 @@ template $LettersWindow: Adw.ApplicationWindow {
           tooltip-text: _("Underline");
         }
 
-        ToggleButton list_button {
-          icon-name: "insert-list-symbolic";
-          tooltip-text: _("Insert list");
+        MenuButton {
+          tooltip-text: _("Formatting Options");
+          menu-model: formatting_menu;
+          direction: down;
         }
 
-        Button link_button {
-          icon-name: "chain-link-symbolic";
-          tooltip-text: _("Insert link...");
-        }
-
-        Button image_button {
-          icon-name: "image-round-symbolic";
-          tooltip-text: _("Insert image...");
+        MenuButton {
+          icon-name: "list-add-symbolic";
+          tooltip-text: _("Insert...");
+          menu-model: insert_menu;
+          direction: down;
         }
 
         DropDown styles_dropdown{
@@ -105,8 +103,9 @@ menu primary_menu {
       label: _("Save");
       action: "app.save";
     }
-    item (_("Save As"), "app.save_as", "document-save-as-symbolic")
-
+    item (_("Save As"), "app.save_as")
+  }
+  section {
     item {
       label: _("Print");
       action: "app.print";
@@ -116,7 +115,8 @@ menu primary_menu {
       label: _("Export to PDF");
       action: "app.export";
     }
-
+  }
+  section {
     item {
       label: _("_Keyboard Shortcuts");
       action: "app.shortcuts";
@@ -127,4 +127,40 @@ menu primary_menu {
       action: "app.about";
     }
   }
+}
+
+menu insert_menu {
+  section {
+    item {
+      label: _("Insert Image");
+      action: "app.insertimage";
+    }
+    item {
+      label: _("Insert Link");
+      action: "app.insertlink";
+    }
+    item {
+      label: _("Insert List");
+      action: "app.insertlist";
+    }
+  }
+}
+
+menu formatting_menu{
+    item {
+      label: _("Strikethrough");
+      action: "app.strikethrough";
+    }
+    item {
+      label: _("Highlight");
+      action: "app.highlight";
+    }
+    item {
+      label: _("Increase Indent");
+      action: "app.indent";
+    }
+    item {
+      label: _("Decrease Indent");
+      action: "app.outdent";
+    }
 }

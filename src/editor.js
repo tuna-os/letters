@@ -3,6 +3,19 @@ const formatting = {
   bold:   () => document.execCommand('bold'),
   italic: () => document.execCommand('italic'),
   underline: () => document.execCommand('underline'),
+  strikethrough: () => document.execCommand('strikeThrough'),
+  indent: () => document.execCommand('indent'),
+  outdent: () => document.execCommand('outdent'),
+  highlight: () => {
+    const isHighlighted = document.queryCommandValue('backColor') === 'rgb(255, 255, 0)' || document.queryCommandValue('backColor') === '#ffff00';
+
+    if (isHighlighted) {
+      document.execCommand('backColor', false, 'transparent');
+    } else {
+      const color = 'yellow';
+      document.execCommand('backColor', false, color);
+    }
+  },
   createLink: () => {
     const url = prompt('Enter link URL');
     if (url) document.execCommand('createLink', false, url);
@@ -90,7 +103,9 @@ function getInlineStyles() {
     italic: false,
     bold: false,
     underline: false,
+    strikeout: false, // New property
     list: false
+    // Highlight state is omitted due to the complexity of tracking style="background-color:..."
   };
 
   while (node && node !== editor) {
@@ -106,6 +121,11 @@ function getInlineStyles() {
 
     if (!styles.underline && tag === 'u') {
       styles.underline = true;
+    }
+
+    // Check for strikeout tags (<s> or <del>)
+    if (!styles.strikeout && (tag === 's' || tag === 'del')) {
+      styles.strikeout = true;
     }
 
     if (!styles.list && (tag === 'ul' || tag === 'ol')) {

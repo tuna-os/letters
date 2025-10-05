@@ -19,9 +19,7 @@ symbolic_icons = [
   'text-bold',
   'text-italic',
   'text-underline',
-  'insert-list',
-  'chain-link',
-  'image-round'
+  'marker',
 ]
 
 foreach icon : symbolic_icons

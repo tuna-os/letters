@@ -23,7 +23,7 @@ import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Gtk, Gio, Adw, GLib
 from .window import LettersWindow
 import os, sys
 
@@ -51,7 +51,13 @@ class LettersApplication(Adw.Application):
         self.create_action("redo", lambda x, y: self.get_active_window().run_js(None, "document.execCommand('redo')"), ["<ctrl>y"])
         self.create_action("underline", lambda x, y: self.get_active_window().run_js(None, "formatting.underline()"), ["<ctrl>u"])
         self.create_action("insertlink", lambda x, y: self.get_active_window().run_js(None, "formatting.createLink()"), ["<ctrl>k"])
+        self.create_action("insertimage", lambda x, y: self.get_application().get_active_window().run_js(None, "insertImage()"))
+        self.create_action("insertlist", lambda x, y: self.get_application().get_active_window().run_js(None, "document.execCommand('insertUnorderedList')"))
 
+        self.create_action("strikethrough", lambda x, y: self.get_active_window().run_js(None, "formatting.strikethrough()"))
+        self.create_action("highlight", lambda x, y: self.get_active_window().run_js(None, "formatting.highlight()"))
+        self.create_action("indent", lambda x, y: self.get_active_window().run_js(None, "formatting.indent()"))
+        self.create_action("outdent", lambda x, y: self.get_active_window().run_js(None, "formatting.outdent()"))
         self.files = []
         self.connect("open", self.open_files)
 

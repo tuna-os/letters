@@ -39,9 +39,6 @@ class LettersWindow(Adw.ApplicationWindow):
     bold_button = Gtk.Template.Child()
     italic_button = Gtk.Template.Child()
     underline_button = Gtk.Template.Child()
-    list_button = Gtk.Template.Child()
-    link_button = Gtk.Template.Child()
-    image_button = Gtk.Template.Child()
     styles_dropdown = Gtk.Template.Child()
 
     FORCE_CLOSE = False
@@ -60,9 +57,6 @@ class LettersWindow(Adw.ApplicationWindow):
         self.bold_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.bold()"))
         self.italic_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.italic()"))
         self.underline_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.underline()"))
-        self.list_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "document.execCommand('insertUnorderedList')"))
-        self.link_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.createLink()"))
-        self.image_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "insertImage()"))
         self.styles_dropdown.connect("notify::selected", lambda dropdown, _: self.get_application().get_active_window().on_style_dropdown_changed(None, dropdown))
 
         if not opening_with_files:
@@ -79,32 +73,6 @@ class LettersWindow(Adw.ApplicationWindow):
         self.toolbar.set_visible(True)
         self.stack.set_visible_child(self.tabview)
         self.tbview.set_top_bar_style(Adw.ToolbarStyle.RAISED)
-
-    def on_context_menu(self, webview, context_menu, hit_test_result):
-        if hit_test_result.context_is_link():
-            for i in range(5):
-                if i == 3: #copy link location
-                    continue
-
-                context_menu.remove(context_menu.get_items()[i])
-            context_menu.remove(context_menu.get_items()[0])
-
-        elif hit_test_result.context_is_image():
-            import json
-            image_url = hit_test_result.get_image_uri()
-            safe_url = json.dumps(image_url)
-            js_code = f"""
-            (function() {{
-                const img = document.querySelector("img[src='"+{safe_url}+"']");
-                if (img) resizeImg(img);
-            }})()
-            """
-            action = Gio.SimpleAction.new("resize_image", None)
-            action.connect("activate", lambda a, p: self.run_js(webview, js_code))
-
-            context_menu_item = WebKit.ContextMenuItem.new_from_gaction(action, "Resize Image", None)
-            context_menu.insert(context_menu_item, 0)
-        return
 
     def open(self, action, data = None):
     # show a dialog to open a file
@@ -270,9 +238,6 @@ class LettersWindow(Adw.ApplicationWindow):
         # Returns a WebKit.WebView() with style change handlers registered
         webview = WebKit.WebView()
 
-        settings = webview.get_settings()
-        settings.set_enable_developer_extras(True)
-
         ucm = webview.get_user_content_manager()
         ucm.register_script_message_handler("styleChange")
         ucm.register_script_message_handler("inlineStyleChange")
@@ -306,6 +271,35 @@ class LettersWindow(Adw.ApplicationWindow):
 
         webview.load_html(content)
         return webview
+
+    def on_context_menu(self, webview, context_menu, hit_test_result):
+        if not hit_test_result.context_is_editable():
+            return True
+
+        if hit_test_result.context_is_link():
+            for i in range(5):
+                if i == 3: #copy link location
+                    continue
+
+                context_menu.remove(context_menu.get_items()[i])
+            context_menu.remove(context_menu.get_items()[0])
+
+        elif hit_test_result.context_is_image():
+            import json
+            image_url = hit_test_result.get_image_uri()
+            safe_url = json.dumps(image_url)
+            js_code = f"""
+            (function() {{
+                const img = document.querySelector("img[src='"+{safe_url}+"']");
+                if (img) resizeImg(img);
+            }})()
+            """
+            action = Gio.SimpleAction.new("resize_image", None)
+            action.connect("activate", lambda a, p: self.run_js(webview, js_code))
+
+            context_menu_item = WebKit.ContextMenuItem.new_from_gaction(action, "Resize Image", None)
+            context_menu.insert(context_menu_item, 0)
+        return
 
     def run_js(self, webview, code):
         if not webview: # detect current webview
@@ -504,7 +498,6 @@ class LettersWindow(Adw.ApplicationWindow):
         self.italic_button.set_active(bool(styles.get("italic", False)))
         self.bold_button.set_active(bool(styles.get("bold", False)))
         self.underline_button.set_active(bool(styles.get("underline", False)))
-        self.list_button.set_active(bool(styles.get("list", False)))
 
     def on_content_changed(self, ucm, msg, webview):
         if webview.fresh:
