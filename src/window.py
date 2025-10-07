@@ -261,10 +261,13 @@ class LettersWindow(Adw.ApplicationWindow):
                     print(e)
                     content = f"<p>Error loading file: {e}</p>"
             else:
-                content = file.load_contents(None)[1]
-                f = tempfile.NamedTemporaryFile("wb", suffix = file.get_basename())
-                f.write(content)
-                content = f.read()
+                try:
+                    content = file.load_contents(None)[1]
+                    f = tempfile.NamedTemporaryFile("wb", suffix = file.get_basename())
+                    f.write(content)
+                    content = content.decode()
+                except Exception as e:
+                    print(e)
         else:
             webview.file = None
             content = '<!DOCTYPE html><html><head></head><body><p></p></body></html>'
