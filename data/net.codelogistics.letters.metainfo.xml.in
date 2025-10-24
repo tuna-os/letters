@@ -55,6 +55,16 @@
   </screenshots>
 
   <releases>
+    <release version="0.2.0" date="2025-10-24">
+      <description translate="no">
+        <ul>
+          <li>New formatting features: strikethrough, highlight, indent and outdent</li>
+          <li>Added support for exporting to RTF</li>
+          <li>Fixed HTML and TXT import</li>
+          <li>New icon (Jakub Steiner)</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.1.0" date="2025-10-03">
       <description translate="no">
         <p>First release</p>

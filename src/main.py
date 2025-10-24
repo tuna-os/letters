@@ -83,7 +83,7 @@ class LettersApplication(Adw.Application):
         about = Adw.AboutDialog(application_name=_('Letters'),
                                 application_icon='net.codelogistics.letters',
                                 developer_name='Satvik Patwardhan',
-                                version='0.1.0',
+                                version='0.2.0',
                                 developers=['Satvik Patwardhan'],
                                 artists=["Jakub Steiner"],
                                 copyright='© 2025 Satvik Patwardhan',
