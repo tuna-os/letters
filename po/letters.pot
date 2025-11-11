@@ -1,0 +1,306 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the letters package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: letters\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-06 17:40+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/net.codelogistics.letters.desktop.in:2
+#: data/net.codelogistics.letters.metainfo.xml.in:7 src/main.py:83
+#: src/window.py:233 src/window.blp:9
+msgid "Letters"
+msgstr ""
+
+#: data/net.codelogistics.letters.desktop.in:8
+msgid "GTK;"
+msgstr ""
+
+#: data/net.codelogistics.letters.metainfo.xml.in:8
+msgid "Word processor for GNOME"
+msgstr ""
+
+#: data/net.codelogistics.letters.metainfo.xml.in:10
+msgid ""
+"Letters is a modern, minimalist word processor for the GNOME desktop, with "
+"support for reading and writing DOCX, ODT, MD and HTML files. It can also "
+"export your documents as a PDF file."
+msgstr ""
+
+#: data/net.codelogistics.letters.metainfo.xml.in:16
+msgid "Satvik Patwardhan"
+msgstr ""
+
+#: data/net.codelogistics.letters.metainfo.xml.in:53
+msgid "Screenshot of Letters"
+msgstr ""
+
+#. Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
+#: src/main.py:94
+msgid "translator-credits"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:5
+msgid "Shortcuts"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:8
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:13
+msgctxt "shortcut window"
+msgid "New Window"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:18
+msgctxt "shortcut window"
+msgid "Open"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:23
+msgctxt "shortcut window"
+msgid "New Document"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:28
+msgctxt "shortcut window"
+msgid "Save"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:33
+msgctxt "shortcut window"
+msgid "Save as"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:38
+msgctxt "shortcut window"
+msgid "Close Document"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:43
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:48
+msgctxt "shortcut window"
+msgid "Insert Hyperlink"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:53
+msgctxt "shortcut window"
+msgid "Underline"
+msgstr ""
+
+#: src/window.py:69
+msgid "Untitled Document"
+msgstr ""
+
+#: src/window.py:84
+msgid "Unsupported File Format"
+msgstr ""
+
+#: src/window.py:85
+msgid ""
+"The file you selected could not be opened as it is in an unrecognised format."
+msgstr ""
+
+#: src/window.py:86
+msgid "OK"
+msgstr ""
+
+#: src/window.py:160
+msgid "Save document?"
+msgstr ""
+
+#: src/window.py:161
+msgid ""
+"\n"
+" This document has not been saved. Changes which are not saved will be "
+"permanently lost."
+msgstr ""
+
+#: src/window.py:162 src/window.py:202
+msgid "_Cancel"
+msgstr ""
+
+#: src/window.py:163
+msgid "_Discard"
+msgstr ""
+
+#: src/window.py:164
+msgid "_Save"
+msgstr ""
+
+#: src/window.py:196
+msgid "Unsaved changes"
+msgstr ""
+
+#: src/window.py:197
+msgid "The following documents have unsaved changes:"
+msgstr ""
+
+#: src/window.py:199
+msgid "All unsaved changes will be discarded if you close Letters now."
+msgstr ""
+
+#: src/window.py:203
+msgid "_Discard All"
+msgstr ""
+
+#: src/window.py:381 src/window.py:384
+msgid "Error saving file: "
+msgstr ""
+
+#: src/window.py:432 src/window.py:434
+msgid "Error exporting file: "
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Paragraph"
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 1"
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 2"
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 3"
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 4"
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 5"
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 6"
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Code"
+msgstr ""
+
+#: src/window.py:481 src/window.blp:5
+msgid "Quote"
+msgstr ""
+
+#: src/window.blp:22
+msgid "New Document"
+msgstr ""
+
+#: src/window.blp:29
+msgid "Main Menu"
+msgstr ""
+
+#: src/window.blp:46
+msgid "Bold"
+msgstr ""
+
+#: src/window.blp:51
+msgid "Italic"
+msgstr ""
+
+#: src/window.blp:56
+msgid "Underline"
+msgstr ""
+
+#: src/window.blp:60
+msgid "Formatting Options"
+msgstr ""
+
+#: src/window.blp:67
+msgid "Insert..."
+msgstr ""
+
+#: src/window.blp:73
+msgid "Paragraph Style"
+msgstr ""
+
+#: src/window.blp:87
+msgid "document-new-symbolic"
+msgstr ""
+
+#: src/window.blp:88
+msgid "Create a new document"
+msgstr ""
+
+#: src/window.blp:89
+msgid "Create a new document (Ctrl + N), or open an existing one (Ctrl + O)"
+msgstr ""
+
+#: src/window.blp:99
+msgid "Open"
+msgstr ""
+
+#: src/window.blp:103
+msgid "Save"
+msgstr ""
+
+#: src/window.blp:106
+msgid "Save As"
+msgstr ""
+
+#: src/window.blp:110
+msgid "Print"
+msgstr ""
+
+#: src/window.blp:115
+msgid "Export to PDF"
+msgstr ""
+
+#: src/window.blp:121
+msgid "_Keyboard Shortcuts"
+msgstr ""
+
+#: src/window.blp:126
+msgid "_About Letters"
+msgstr ""
+
+#: src/window.blp:135
+msgid "Insert Image"
+msgstr ""
+
+#: src/window.blp:139
+msgid "Insert Link"
+msgstr ""
+
+#: src/window.blp:143
+msgid "Insert List"
+msgstr ""
+
+#: src/window.blp:151
+msgid "Strikethrough"
+msgstr ""
+
+#: src/window.blp:155
+msgid "Highlight"
+msgstr ""
+
+#: src/window.blp:159
+msgid "Increase Indent"
+msgstr ""
+
+#: src/window.blp:163
+msgid "Decrease Indent"
+msgstr ""
