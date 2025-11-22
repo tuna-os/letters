@@ -1,0 +1,326 @@
+From 5b4298a04a7099718a426197bc1e4f729818a9f2 Mon Sep 17 00:00:00 2001
+From: Neko-the-gamer <neko-the-gamer@noreply.codeberg.org>
+Date: Thu, 6 Nov 2025 17:57:13 +0100
+Subject: [PATCH] Upload project main .pot file
+
+---
+ po/letters.pot | 306 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 306 insertions(+)
+ create mode 100644 po/letters.pot
+
+diff --git a/po/letters.pot b/po/letters.pot
+new file mode 100644
+index 0000000..21de196
+--- /dev/null
++++ b/po/letters.pot
+@@ -0,0 +1,306 @@
++# SOME DESCRIPTIVE TITLE.
++# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
++# This file is distributed under the same license as the letters package.
++# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
++#
++#, fuzzy
++msgid ""
++msgstr ""
++"Project-Id-Version: letters\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2025-11-06 17:40+0100\n"
++"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
++"Last-Translator: Luka Handy <lukahandy@onet.eu>\n"
++"Language-Team: Polish (Polski) <>\n"
++"Language: pl \n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=CHARSET\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++#: data/net.codelogistics.letters.desktop.in:2
++#: data/net.codelogistics.letters.metainfo.xml.in:7 src/main.py:83
++#: src/window.py:233 src/window.blp:9
++msgid "Letters"
++msgstr "Letters"
++
++#: data/net.codelogistics.letters.desktop.in:8
++msgid "GTK;"
++msgstr "GTK;"
++
++#: data/net.codelogistics.letters.metainfo.xml.in:8
++msgid "Word processor for GNOME"
++msgstr "Edytor tekstu dla środowiska GNOME"
++
++#: data/net.codelogistics.letters.metainfo.xml.in:10
++msgid ""
++"Letters is a modern, minimalist word processor for the GNOME desktop, with "
++"support for reading and writing DOCX, ODT, MD and HTML files. It can also "
++"export your documents as a PDF file."
++msgstr ""
++"Letters to nowoczesny, minimalistyczny edytor tekstu dla środowiska GNOME, który"
++"wspiera następujące formaty: DOCX, ODT, MD i HTLM. Posiada również"
++"funkcję eksportu dokumentów jako pliki PDF"
++#: data/net.codelogistics.letters.metainfo.xml.in:16
++msgid "Satvik Patwardhan"
++msgstr "Satvik Patwardhan"
++
++#: data/net.codelogistics.letters.metainfo.xml.in:53
++msgid "Screenshot of Letters"
++msgstr "Zrzuty ekranu programu Letters"
++
++#. Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
++#: src/main.py:94
++msgid "translator-credits"
++msgstr "Gruentee5 Mastodon: ohai.social/@gruentee"
++
++#: src/shortcuts-dialog.blp:5
++msgid "Shortcuts"
++msgstr "Skróty"
++
++#: src/shortcuts-dialog.blp:8
++msgctxt "shortcut window"
++msgid "Show Shortcuts"
++msgstr "Pokaż skróty"
++
++#: src/shortcuts-dialog.blp:13
++msgctxt "shortcut window"
++msgid "New Window" 
++msgstr "Nowe okno"
++
++#: src/shortcuts-dialog.blp:18
++msgctxt "shortcut window"
++msgid "Open"
++msgstr "Otwórz"
++
++#: src/shortcuts-dialog.blp:23
++msgctxt "shortcut window"
++msgid "New Document"
++msgstr "Nowy dokument"
++
++#: src/shortcuts-dialog.blp:28
++msgctxt "shortcut window"
++msgid "Save"
++msgstr "Zapisz"
++
++#: src/shortcuts-dialog.blp:33
++msgctxt "shortcut window"
++msgid "Save as"
++msgstr "Zapisz jako..."
++
++#: src/shortcuts-dialog.blp:38
++msgctxt "shortcut window"
++msgid "Close Document"
++msgstr "Zamknij dokument"
++
++#: src/shortcuts-dialog.blp:43
++msgctxt "shortcut window"
++msgid "Quit"
++msgstr "Wyjdź"
++
++#: src/shortcuts-dialog.blp:48
++msgctxt "shortcut window"
++msgid "Insert Hyperlink"
++msgstr "Wstaw hiperłącze"
++
++#: src/shortcuts-dialog.blp:53
++msgctxt "shortcut window"
++msgid "Underline"
++msgstr "Podkreśl"
++
++#: src/window.py:69
++msgid "Untitled Document"
++msgstr "Bez tytułu"
++
++#: src/window.py:84
++msgid "Unsupported File Format"
++msgstr "Niewspierany format pliku"
++
++#: src/window.py:85
++msgid ""
++"The file you selected could not be opened as it is in an unrecognised format."
++msgstr "Nie otworzono wybranego pliku przez niewspierany format"
++
++#: src/window.py:86
++msgid "OK"
++msgstr "Ok"
++
++#: src/window.py:160
++msgid "Save document?"
++msgstr "Zapisać zmiany?"
++
++#: src/window.py:161
++msgid ""
++"\n"
++" This document has not been saved. Changes which are not saved will be "
++"permanently lost."
++msgstr ""
++"\n"
++"Zmiany w dokumencie nie zostały zapisane i mogą zostać utracone"
++
++#: src/window.py:162 src/window.py:202
++msgid "_Cancel"
++msgstr "_Anuluj"
++
++#: src/window.py:163
++msgid "_Discard"
++msgstr "_Odrzuć zmiany"
++
++#: src/window.py:164
++msgid "_Save"
++msgstr "_Zapisz"
++
++#: src/window.py:196
++msgid "Unsaved changes"
++msgstr "Niezapisane zmiany"
++
++#: src/window.py:197
++msgid "The following documents have unsaved changes:"
++msgstr "Ten dokument posiada niezapisane zmiany:"
++
++#: src/window.py:199
++msgid "All unsaved changes will be discarded if you close Letters now."
++msgstr "Wszystkie niezapisane zmiany będą odrzucone, jeżeli Letters zostanie teraz zamknięty"
++
++#: src/window.py:203
++msgid "_Discard All"
++msgstr "_Odrzuć wszystko"
++
++#: src/window.py:381 src/window.py:384
++msgid "Error saving file: "
++msgstr "Błąd zapisu pliku"
++
++#: src/window.py:432 src/window.py:434
++msgid "Error exporting file: "
++msgstr "Błąd eksportu pliku"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Paragraph"
++msgstr "Treść"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Heading 1"
++msgstr "Nagłówek 1"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Heading 2"
++msgstr "Nagłówek 2"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Heading 3"
++msgstr "Nagłówek 3"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Heading 4"
++msgstr "Nagłówek 4"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Heading 5"
++msgstr "Nagłówek 5"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Heading 6"
++msgstr "Nagłówek 6"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Code"
++msgstr "Kod"
++
++#: src/window.py:481 src/window.blp:5
++msgid "Quote"
++msgstr "Cytat"
++
++#: src/window.blp:22
++msgid "New Document"
++msgstr "Nowy dokuemnt"
++
++#: src/window.blp:29
++msgid "Main Menu"
++msgstr "Menu główne"
++
++#: src/window.blp:46
++msgid "Bold"
++msgstr "Pogrubienie"
++
++#: src/window.blp:51
++msgid "Italic"
++msgstr "Kursywa"
++
++#: src/window.blp:56
++msgid "Underline"
++msgstr "Podkreślenie"
++
++#: src/window.blp:60
++msgid "Formatting Options"
++msgstr "Opcje formatowania"
++
++#: src/window.blp:67
++msgid "Insert..."
++msgstr "Wstaw..."
++
++#: src/window.blp:73
++msgid "Paragraph Style"
++msgstr "Styl akapitu"
++
++#: src/window.blp:87
++msgid "document-new-symbolic"
++msgstr ""
++
++#: src/window.blp:88
++msgid "Create a new document"
++msgstr "Utwórz nowy dokument"
++
++#: src/window.blp:89
++msgid "Create a new document (Ctrl + N), or open an existing one (Ctrl + O)"
++msgstr "Stwórz nowy dokument (Ctrl + N), lub otwórz istniejący (Ctrl + O)"
++
++#: src/window.blp:99
++msgid "Open"
++msgstr "Otwórz"
++
++#: src/window.blp:103
++msgid "Save"
++msgstr "Zapisz"
++
++#: src/window.blp:106
++msgid "Save As"
++msgstr "Zapisz jako..."
++
++#: src/window.blp:110
++msgid "Print"
++msgstr "Drukuj"
++
++#: src/window.blp:115
++msgid "Export to PDF"
++msgstr "Eksportuj jako PDF"
++
++#: src/window.blp:121
++msgid "_Keyboard Shortcuts"
++msgstr "_Skróty klawiszowe"
++
++#: src/window.blp:126
++msgid "_About Letters"
++msgstr "_O Letters"
++
++#: src/window.blp:135
++msgid "Insert Image"
++msgstr "Wstaw obraz"
++
++#: src/window.blp:139
++msgid "Insert Link"
++msgstr "Wstaw link"
++
++#: src/window.blp:143
++msgid "Insert List"
++msgstr "Wstaw listę"
++
++#: src/window.blp:151
++msgid "Strikethrough"
++msgstr "Przekreślenie"
++
++#: src/window.blp:155
++msgid "Highlight"
++msgstr "Podkreślenie"
++
++#: src/window.blp:159
++msgid "Increase Indent"
++msgstr "Zwiększ wcięcię"
++
++#: src/window.blp:163
++msgid "Decrease Indent"
++msgstr "Zmniejsz wcięcię"
