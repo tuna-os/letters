@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: letters\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-06 17:40+0100\n"
-"PO-Revision-Date: 2026-02-11 17:02+0900\n"
+"PO-Revision-Date: 2026-02-11 17:42+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -30,7 +30,7 @@ msgstr ""
 
 #: data/net.codelogistics.letters.metainfo.xml.in:8
 msgid "Word processor for GNOME"
-msgstr ""
+msgstr "GNOME 向けのワードプロセッサー"
 
 #: data/net.codelogistics.letters.metainfo.xml.in:10
 msgid ""
@@ -45,87 +45,87 @@ msgstr ""
 
 #: data/net.codelogistics.letters.metainfo.xml.in:53
 msgid "Screenshot of Letters"
-msgstr ""
+msgstr "Letters のスクリーンショット"
 
 #. Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
 #: src/main.py:94
 msgid "translator-credits"
-msgstr ""
+msgstr "camegone"
 
 #: src/shortcuts-dialog.blp:5
 msgid "Shortcuts"
-msgstr ""
+msgstr "ショートカット"
 
 #: src/shortcuts-dialog.blp:8
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
-msgstr ""
+msgstr "ショートカット一覧を表示"
 
 #: src/shortcuts-dialog.blp:13
 msgctxt "shortcut window"
 msgid "New Window"
-msgstr ""
+msgstr "新しいウィンドウ"
 
 #: src/shortcuts-dialog.blp:18
 msgctxt "shortcut window"
 msgid "Open"
-msgstr ""
+msgstr "開く"
 
 #: src/shortcuts-dialog.blp:23
 msgctxt "shortcut window"
 msgid "New Document"
-msgstr ""
+msgstr "新しい文書"
 
 #: src/shortcuts-dialog.blp:28
 msgctxt "shortcut window"
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: src/shortcuts-dialog.blp:33
 msgctxt "shortcut window"
 msgid "Save as"
-msgstr ""
+msgstr "別名で保存"
 
 #: src/shortcuts-dialog.blp:38
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr ""
+msgstr "ドキュメントを閉じる"
 
 #: src/shortcuts-dialog.blp:43
 msgctxt "shortcut window"
 msgid "Quit"
-msgstr ""
+msgstr "アプリを閉じる"
 
 #: src/shortcuts-dialog.blp:48
 msgctxt "shortcut window"
 msgid "Insert Hyperlink"
-msgstr ""
+msgstr "ハイパーリンクを挿入"
 
 #: src/shortcuts-dialog.blp:53
 msgctxt "shortcut window"
 msgid "Underline"
-msgstr ""
+msgstr "下線"
 
 #: src/window.py:69
 msgid "Untitled Document"
-msgstr ""
+msgstr "無題の文書"
 
 #: src/window.py:84
 msgid "Unsupported File Format"
-msgstr ""
+msgstr "非対応のファイル形式"
 
 #: src/window.py:85
 msgid ""
 "The file you selected could not be opened as it is in an unrecognised format."
-msgstr ""
+msgstr "選択したファイルは、不明なフォーマットであるため開けません。"
 
 #: src/window.py:86
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/window.py:160
 msgid "Save document?"
-msgstr ""
+msgstr "ドキュメントを保存しますか?"
 
 #: src/window.py:161
 msgid ""
@@ -133,110 +133,113 @@ msgid ""
 " This document has not been saved. Changes which are not saved will be "
 "permanently lost."
 msgstr ""
+"\n"
+"このドキュメントは保存されていません。保存されていない変更は永久に失われま"
+"す。"
 
 #: src/window.py:162 src/window.py:202
 msgid "_Cancel"
-msgstr ""
+msgstr "キャンセル(_C)"
 
 #: src/window.py:163
 msgid "_Discard"
-msgstr ""
+msgstr "破棄(_D)"
 
 #: src/window.py:164
 msgid "_Save"
-msgstr ""
+msgstr "保存(_S)"
 
 #: src/window.py:196
 msgid "Unsaved changes"
-msgstr ""
+msgstr "保存されていない変更"
 
 #: src/window.py:197
 msgid "The following documents have unsaved changes:"
-msgstr ""
+msgstr "以下のドキュメントには保存されていない変更点があります:"
 
 #: src/window.py:199
 msgid "All unsaved changes will be discarded if you close Letters now."
-msgstr ""
+msgstr "今 Letters を閉じると、全ての保存されていない変更は破棄されます。"
 
 #: src/window.py:203
 msgid "_Discard All"
-msgstr ""
+msgstr "全て破棄(_D)"
 
 #: src/window.py:381 src/window.py:384
 msgid "Error saving file: "
-msgstr ""
+msgstr "ファイルの保存エラー: "
 
 #: src/window.py:432 src/window.py:434
 msgid "Error exporting file: "
-msgstr ""
+msgstr "ファイルの出力エラー: "
 
 #: src/window.py:481 src/window.blp:5
 msgid "Paragraph"
-msgstr ""
+msgstr "段落"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Heading 1"
-msgstr ""
+msgstr "見出し 1"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Heading 2"
-msgstr ""
+msgstr "見出し 2"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Heading 3"
-msgstr ""
+msgstr "見出し 3"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Heading 4"
-msgstr ""
+msgstr "見出し 4"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Heading 5"
-msgstr ""
+msgstr "見出し 5"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Heading 6"
-msgstr ""
+msgstr "見出し 6"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Code"
-msgstr ""
+msgstr "コード"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Quote"
-msgstr ""
+msgstr "引用"
 
 #: src/window.blp:22
 msgid "New Document"
-msgstr ""
+msgstr "新しい文書"
 
 #: src/window.blp:29
 msgid "Main Menu"
-msgstr ""
+msgstr "メインメニュー"
 
 #: src/window.blp:46
 msgid "Bold"
-msgstr ""
+msgstr "太字"
 
 #: src/window.blp:51
 msgid "Italic"
-msgstr ""
+msgstr "斜体"
 
 #: src/window.blp:56
 msgid "Underline"
-msgstr ""
+msgstr "下線"
 
 #: src/window.blp:60
 msgid "Formatting Options"
-msgstr ""
+msgstr "書式設定"
 
 #: src/window.blp:67
 msgid "Insert..."
-msgstr ""
+msgstr "挿入..."
 
 #: src/window.blp:73
 msgid "Paragraph Style"
-msgstr ""
+msgstr "段落スタイル"
 
 #: src/window.blp:87
 msgid "document-new-symbolic"
@@ -244,64 +247,66 @@ msgstr ""
 
 #: src/window.blp:88
 msgid "Create a new document"
-msgstr ""
+msgstr "新しい文書を作成"
 
 #: src/window.blp:89
 msgid "Create a new document (Ctrl + N), or open an existing one (Ctrl + O)"
 msgstr ""
+"新しい文章を作成する (Ctrl + N) か、すでにあるファイルを開いて (Ctrl + O) く"
+"ださい"
 
 #: src/window.blp:99
 msgid "Open"
-msgstr ""
+msgstr "開く"
 
 #: src/window.blp:103
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: src/window.blp:106
 msgid "Save As"
-msgstr ""
+msgstr "別名で保存"
 
 #: src/window.blp:110
 msgid "Print"
-msgstr ""
+msgstr "印刷"
 
 #: src/window.blp:115
 msgid "Export to PDF"
-msgstr ""
+msgstr "PDF として出力"
 
 #: src/window.blp:121
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "キーボードショートカット(_K)"
 
 #: src/window.blp:126
 msgid "_About Letters"
-msgstr ""
+msgstr "Letters について(_A)"
 
 #: src/window.blp:135
 msgid "Insert Image"
-msgstr ""
+msgstr "画像を挿入"
 
 #: src/window.blp:139
 msgid "Insert Link"
-msgstr ""
+msgstr "リンクを挿入"
 
 #: src/window.blp:143
 msgid "Insert List"
-msgstr ""
+msgstr "リストを挿入"
 
 #: src/window.blp:151
 msgid "Strikethrough"
-msgstr ""
+msgstr "打ち消し線"
 
 #: src/window.blp:155
 msgid "Highlight"
-msgstr ""
+msgstr "強調"
 
 #: src/window.blp:159
 msgid "Increase Indent"
-msgstr ""
+msgstr "インデントを増やす"
 
 #: src/window.blp:163
 msgid "Decrease Indent"
-msgstr ""
+msgstr "インデントを減らす"
