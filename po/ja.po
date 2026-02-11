@@ -1,0 +1,312 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the letters package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: letters\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-06 17:40+0100\n"
+"PO-Revision-Date: 2026-02-11 17:42+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+
+#: data/net.codelogistics.letters.desktop.in:2
+#: data/net.codelogistics.letters.metainfo.xml.in:7 src/main.py:83
+#: src/window.py:233 src/window.blp:9
+msgid "Letters"
+msgstr ""
+
+#: data/net.codelogistics.letters.desktop.in:8
+msgid "GTK;"
+msgstr ""
+
+#: data/net.codelogistics.letters.metainfo.xml.in:8
+msgid "Word processor for GNOME"
+msgstr "GNOME 向けのワードプロセッサー"
+
+#: data/net.codelogistics.letters.metainfo.xml.in:10
+msgid ""
+"Letters is a modern, minimalist word processor for the GNOME desktop, with "
+"support for reading and writing DOCX, ODT, MD and HTML files. It can also "
+"export your documents as a PDF file."
+msgstr ""
+
+#: data/net.codelogistics.letters.metainfo.xml.in:16
+msgid "Satvik Patwardhan"
+msgstr ""
+
+#: data/net.codelogistics.letters.metainfo.xml.in:53
+msgid "Screenshot of Letters"
+msgstr "Letters のスクリーンショット"
+
+#. Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
+#: src/main.py:94
+msgid "translator-credits"
+msgstr "camegone"
+
+#: src/shortcuts-dialog.blp:5
+msgid "Shortcuts"
+msgstr "ショートカット"
+
+#: src/shortcuts-dialog.blp:8
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr "ショートカット一覧を表示"
+
+#: src/shortcuts-dialog.blp:13
+msgctxt "shortcut window"
+msgid "New Window"
+msgstr "新しいウィンドウ"
+
+#: src/shortcuts-dialog.blp:18
+msgctxt "shortcut window"
+msgid "Open"
+msgstr "開く"
+
+#: src/shortcuts-dialog.blp:23
+msgctxt "shortcut window"
+msgid "New Document"
+msgstr "新しい文書"
+
+#: src/shortcuts-dialog.blp:28
+msgctxt "shortcut window"
+msgid "Save"
+msgstr "保存"
+
+#: src/shortcuts-dialog.blp:33
+msgctxt "shortcut window"
+msgid "Save as"
+msgstr "別名で保存"
+
+#: src/shortcuts-dialog.blp:38
+msgctxt "shortcut window"
+msgid "Close Document"
+msgstr "ドキュメントを閉じる"
+
+#: src/shortcuts-dialog.blp:43
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "アプリを閉じる"
+
+#: src/shortcuts-dialog.blp:48
+msgctxt "shortcut window"
+msgid "Insert Hyperlink"
+msgstr "ハイパーリンクを挿入"
+
+#: src/shortcuts-dialog.blp:53
+msgctxt "shortcut window"
+msgid "Underline"
+msgstr "下線"
+
+#: src/window.py:69
+msgid "Untitled Document"
+msgstr "無題の文書"
+
+#: src/window.py:84
+msgid "Unsupported File Format"
+msgstr "非対応のファイル形式"
+
+#: src/window.py:85
+msgid ""
+"The file you selected could not be opened as it is in an unrecognised format."
+msgstr "選択したファイルは、不明なフォーマットであるため開けません。"
+
+#: src/window.py:86
+msgid "OK"
+msgstr "OK"
+
+#: src/window.py:160
+msgid "Save document?"
+msgstr "ドキュメントを保存しますか?"
+
+#: src/window.py:161
+msgid ""
+"\n"
+" This document has not been saved. Changes which are not saved will be "
+"permanently lost."
+msgstr ""
+"\n"
+"このドキュメントは保存されていません。保存されていない変更は永久に失われま"
+"す。"
+
+#: src/window.py:162 src/window.py:202
+msgid "_Cancel"
+msgstr "キャンセル(_C)"
+
+#: src/window.py:163
+msgid "_Discard"
+msgstr "破棄(_D)"
+
+#: src/window.py:164
+msgid "_Save"
+msgstr "保存(_S)"
+
+#: src/window.py:196
+msgid "Unsaved changes"
+msgstr "保存されていない変更"
+
+#: src/window.py:197
+msgid "The following documents have unsaved changes:"
+msgstr "以下のドキュメントには保存されていない変更点があります:"
+
+#: src/window.py:199
+msgid "All unsaved changes will be discarded if you close Letters now."
+msgstr "今 Letters を閉じると、全ての保存されていない変更は破棄されます。"
+
+#: src/window.py:203
+msgid "_Discard All"
+msgstr "全て破棄(_D)"
+
+#: src/window.py:381 src/window.py:384
+msgid "Error saving file: "
+msgstr "ファイルの保存エラー: "
+
+#: src/window.py:432 src/window.py:434
+msgid "Error exporting file: "
+msgstr "ファイルの出力エラー: "
+
+#: src/window.py:481 src/window.blp:5
+msgid "Paragraph"
+msgstr "段落"
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 1"
+msgstr "見出し 1"
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 2"
+msgstr "見出し 2"
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 3"
+msgstr "見出し 3"
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 4"
+msgstr "見出し 4"
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 5"
+msgstr "見出し 5"
+
+#: src/window.py:481 src/window.blp:5
+msgid "Heading 6"
+msgstr "見出し 6"
+
+#: src/window.py:481 src/window.blp:5
+msgid "Code"
+msgstr "コード"
+
+#: src/window.py:481 src/window.blp:5
+msgid "Quote"
+msgstr "引用"
+
+#: src/window.blp:22
+msgid "New Document"
+msgstr "新しい文書"
+
+#: src/window.blp:29
+msgid "Main Menu"
+msgstr "メインメニュー"
+
+#: src/window.blp:46
+msgid "Bold"
+msgstr "太字"
+
+#: src/window.blp:51
+msgid "Italic"
+msgstr "斜体"
+
+#: src/window.blp:56
+msgid "Underline"
+msgstr "下線"
+
+#: src/window.blp:60
+msgid "Formatting Options"
+msgstr "書式設定"
+
+#: src/window.blp:67
+msgid "Insert..."
+msgstr "挿入..."
+
+#: src/window.blp:73
+msgid "Paragraph Style"
+msgstr "段落スタイル"
+
+#: src/window.blp:87
+msgid "document-new-symbolic"
+msgstr ""
+
+#: src/window.blp:88
+msgid "Create a new document"
+msgstr "新しい文書を作成"
+
+#: src/window.blp:89
+msgid "Create a new document (Ctrl + N), or open an existing one (Ctrl + O)"
+msgstr ""
+"新しい文章を作成する (Ctrl + N) か、すでにあるファイルを開いて (Ctrl + O) く"
+"ださい"
+
+#: src/window.blp:99
+msgid "Open"
+msgstr "開く"
+
+#: src/window.blp:103
+msgid "Save"
+msgstr "保存"
+
+#: src/window.blp:106
+msgid "Save As"
+msgstr "別名で保存"
+
+#: src/window.blp:110
+msgid "Print"
+msgstr "印刷"
+
+#: src/window.blp:115
+msgid "Export to PDF"
+msgstr "PDF として出力"
+
+#: src/window.blp:121
+msgid "_Keyboard Shortcuts"
+msgstr "キーボードショートカット(_K)"
+
+#: src/window.blp:126
+msgid "_About Letters"
+msgstr "Letters について(_A)"
+
+#: src/window.blp:135
+msgid "Insert Image"
+msgstr "画像を挿入"
+
+#: src/window.blp:139
+msgid "Insert Link"
+msgstr "リンクを挿入"
+
+#: src/window.blp:143
+msgid "Insert List"
+msgstr "リストを挿入"
+
+#: src/window.blp:151
+msgid "Strikethrough"
+msgstr "打ち消し線"
+
+#: src/window.blp:155
+msgid "Highlight"
+msgstr "強調"
+
+#: src/window.blp:159
+msgid "Increase Indent"
+msgstr "インデントを増やす"
+
+#: src/window.blp:163
+msgid "Decrease Indent"
+msgstr "インデントを減らす"
