@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: letters\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-06 17:40+0100\n"
-"PO-Revision-Date: 2026-02-15 20:58+0100\n"
+"PO-Revision-Date: 2026-02-22 17:57+0100\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: data/net.codelogistics.letters.metainfo.xml.in:7 src/main.py:83
 #: src/window.py:233 src/window.blp:9
 msgid "Letters"
-msgstr "Letters"
+msgstr "Litery"
 
 #: data/net.codelogistics.letters.desktop.in:8
 msgid "GTK;"
@@ -32,7 +32,7 @@ msgstr "GTK;"
 
 #: data/net.codelogistics.letters.metainfo.xml.in:8
 msgid "Word processor for GNOME"
-msgstr "Processor tekstu dla GNOME"
+msgstr "Procesor tekstu dla GNOME"
 
 #: data/net.codelogistics.letters.metainfo.xml.in:10
 msgid ""
@@ -40,7 +40,7 @@ msgid ""
 "support for reading and writing DOCX, ODT, MD and HTML files. It can also "
 "export your documents as a PDF file."
 msgstr ""
-"Letters to nowoczesny, minimalistyczny procesor tekstu dla biurka GNOME ze "
+"Litery to nowoczesny, minimalistyczny procesor tekstu dla biurka GNOME ze "
 "wsparciem dla czytania i zapisywania plików DOCX, ODT, MD i HTML. Może także "
 "wyeksportować twoje dokumenty do pliku PDF."
 
@@ -50,12 +50,12 @@ msgstr "Satvik Patwardhan"
 
 #: data/net.codelogistics.letters.metainfo.xml.in:53
 msgid "Screenshot of Letters"
-msgstr "Zrzut ekrani Liter"
+msgstr "Zrzut ekranu Liter"
 
 #. Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
 #: src/main.py:94
 msgid "translator-credits"
-msgstr "Łukasz Horodecki"
+msgstr "Łukasz Horodecki <lukasz@horodecki.net>, 2026"
 
 #: src/shortcuts-dialog.blp:5
 msgid "Shortcuts"
@@ -64,7 +64,7 @@ msgstr "Skróty klawiszowe"
 #: src/shortcuts-dialog.blp:8
 msgctxt "shortcut window"
 msgid "Show Shortcuts"
-msgstr "Pokaż skróty klawiszowe"
+msgstr "Pokazuje skróty klawiszowe"
 
 #: src/shortcuts-dialog.blp:13
 msgctxt "shortcut window"
@@ -74,7 +74,7 @@ msgstr "Nowe okno"
 #: src/shortcuts-dialog.blp:18
 msgctxt "shortcut window"
 msgid "Open"
-msgstr "Otwórz"
+msgstr "Otwarcie dokumentu"
 
 #: src/shortcuts-dialog.blp:23
 msgctxt "shortcut window"
@@ -84,27 +84,27 @@ msgstr "Nowy dokument"
 #: src/shortcuts-dialog.blp:28
 msgctxt "shortcut window"
 msgid "Save"
-msgstr "Zapisz"
+msgstr "Zapisanie"
 
 #: src/shortcuts-dialog.blp:33
 msgctxt "shortcut window"
 msgid "Save as"
-msgstr "Zapisz jako"
+msgstr "Zapisanie jako"
 
 #: src/shortcuts-dialog.blp:38
 msgctxt "shortcut window"
 msgid "Close Document"
-msgstr "Zamknij dokument"
+msgstr "Zamknięcie dokumentu"
 
 #: src/shortcuts-dialog.blp:43
 msgctxt "shortcut window"
 msgid "Quit"
-msgstr "Wyjdź"
+msgstr "Wyjście"
 
 #: src/shortcuts-dialog.blp:48
 msgctxt "shortcut window"
 msgid "Insert Hyperlink"
-msgstr "Wstaw odnośnik"
+msgstr "Wstawienie odnośnika"
 
 #: src/shortcuts-dialog.blp:53
 msgctxt "shortcut window"
@@ -166,8 +166,8 @@ msgstr "Następujące dokumenty zawierają niezapisane zmiany:"
 #: src/window.py:199
 msgid "All unsaved changes will be discarded if you close Letters now."
 msgstr ""
-"Wszystkie niezapisane zmiany zostaną porzucone, jeżeli zamkniesz teraz "
-"Letters."
+"Wszystkie niezapisane zmiany zostaną porzucone, jeżeli teraz zamkniesz "
+"Litery."
 
 #: src/window.py:203
 msgid "_Discard All"
@@ -251,7 +251,7 @@ msgstr "Styl paragrafu"
 
 #: src/window.blp:87
 msgid "document-new-symbolic"
-msgstr ""
+msgstr "document-new-symbolic"
 
 #: src/window.blp:88
 msgid "Create a new document"
