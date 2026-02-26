@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: letters\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-06 17:40+0100\n"
-"PO-Revision-Date: 2026-02-22 17:57+0100\n"
+"PO-Revision-Date: 2026-02-26 16:38+0100\n"
 "Last-Translator: Łukasz Horodecki <lukasz@horodecki.net>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -113,7 +113,7 @@ msgstr "Podkreślenie"
 
 #: src/window.py:69
 msgid "Untitled Document"
-msgstr "Nienazwany dokument"
+msgstr "Dokument bez nazwy"
 
 #: src/window.py:84
 msgid "Unsupported File Format"
@@ -179,7 +179,7 @@ msgstr "Błąd przy zapisywaniu pliku:"
 
 #: src/window.py:432 src/window.py:434
 msgid "Error exporting file: "
-msgstr "Błat przy eksportowaniu pliku:"
+msgstr "Błąd przy eksportowaniu pliku:"
 
 #: src/window.py:481 src/window.blp:5
 msgid "Paragraph"
