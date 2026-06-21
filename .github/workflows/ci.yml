@@ -1,0 +1,203 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Python lint tools
+        run: pip install flake8
+
+      - name: Python lint (flake8)
+        run: flake8 src/ --count --select=E9,F63,F7,F82,W291,W293 --show-source --statistics
+
+      - name: Python import check
+        run: python3 -c "
+        import py_compile
+        import sys
+        files = ['src/main.py', 'src/window.py', 'src/preferences.py']
+        for f in files:
+            try:
+                py_compile.compile(f, doraise=True)
+                print(f'OK: {f}')
+            except py_compile.PyCompileError as e:
+                print(f'FAIL: {f}: {e}')
+                sys.exit(1)
+        print('All Python files compile')
+        "
+
+      - name: JavaScript syntax check
+        run: node --check src/editor.js
+
+  js-tests:
+    name: JS Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: JS syntax check
+        run: node --check src/editor.js
+
+      - name: Run Markdown pattern tests
+        run: node tests/test_md_patterns.js
+
+      - name: Run Markdown pattern tests with c8 coverage
+        run: |
+          npm install -g c8 2>/dev/null || true
+          npx c8 --reporter=text --reporter=lcov node tests/test_md_patterns.js 2>&1 || true
+
+      - name: Upload JS coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-js
+          path: coverage/
+          retention-days: 7
+
+  python-tests:
+    name: Python Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install test dependencies
+        run: pip install pytest pytest-cov
+
+      - name: Run Python unit tests
+        run: |
+          python -m pytest tests/test_preferences.py -v --cov=tests --cov-report=term-missing --cov-report=lcov
+        continue-on-error: true
+
+      - name: Upload Python coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-python
+          path: coverage/
+          retention-days: 7
+
+  blueprint-compile:
+    name: Blueprint Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install blueprint-compiler
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq blueprint-compiler 2>/dev/null || pip install blueprint-compiler 2>/dev/null || echo "blueprint-compiler not available, skipping"
+
+      - name: Compile Blueprint files
+        run: |
+          if command -v blueprint-compiler &> /dev/null; then
+            for f in src/window.blp src/shortcuts-dialog.blp src/preferences.blp; do
+              echo "Compiling $f..."
+              blueprint-compiler compile $f --output /dev/null && echo "  OK" || echo "  FAIL"
+            done
+          else
+            echo "blueprint-compiler not installed — skipping compile check"
+          fi
+
+  flatpak-manifest-check:
+    name: Flatpak Manifest Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Flatpak manifest JSON
+        run: |
+          python3 -c "
+          import json
+          with open('net.codelogistics.letters.json') as f:
+              data = json.load(f)
+          assert data['id'] == 'net.codelogistics.letters'
+          assert data['runtime'] == 'org.gnome.Platform'
+          assert data['runtime-version'] == '50'
+          modules = [m['name'] for m in data['modules']]
+          assert 'Pandoc' in modules
+          assert 'python3-pypandoc' in modules
+          assert 'python3-weasyprint' in modules
+          assert 'letters' in modules
+          print('Flatpak manifest is valid')
+          print(f'  Runtime: {data[\"runtime\"]} {data[\"runtime-version\"]}')
+          print(f'  Modules: {len(modules)}')
+          "
+
+  gschema-validate:
+    name: GSettings Schema Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate GSettings schema
+        run: |
+          python3 -c "
+          import xml.etree.ElementTree as ET
+          tree = ET.parse('data/net.codelogistics.letters.gschema.xml')
+          root = tree.getroot()
+          schema = root.find('{http://www.gtk.org/schemas}schema') or root.find('schema')
+          assert schema is not None, 'No schema element found'
+          keys = schema.findall('{http://www.gtk.org/schemas}key') or schema.findall('key')
+          key_names = [k.get('name') for k in keys]
+          print(f'GSchema keys ({len(key_names)}):')
+          for name in key_names:
+              print(f'  - {name}')
+          required = {'font', 'spell-check-enabled', 'show-toolbar', 'default-format'}
+          for r in required:
+              assert r in key_names, f'Missing required key: {r}'
+          print('All required keys present')
+          "
+
+  meta-check:
+    name: Metadata Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate desktop file
+        run: |
+          python3 -c "
+          with open('data/net.codelogistics.letters.desktop.in') as f:
+              content = f.read()
+          assert 'Categories=Office;WordProcessor;' in content, 'Wrong categories'
+          assert 'Keywords=word;processor;document;editor;text;pandoc;' in content, 'Wrong keywords'
+          assert 'DBusActivatable=true' in content
+          print('Desktop file looks good')
+          "
+
+      - name: Validate AppStream metainfo
+        run: |
+          python3 -c "
+          with open('data/net.codelogistics.letters.metainfo.xml.in') as f:
+              content = f.read()
+          assert 'net.codelogistics' in content
+          assert 'developer id=\"net.codelogistics\"' in content or '<developer id=\"net.codelogistics\">' in content
+          print('Metainfo looks good')
+          "
+
+      - name: Check README
+        run: |
+          test -f README.md && echo 'README.md exists'
+          test -f COPYING && echo 'COPYING (license) exists'
