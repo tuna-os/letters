@@ -2,6 +2,7 @@ using Gtk 4.0;
 using Adw 1;
 
 template $LettersPreferencesWindow: Adw.PreferencesWindow {
+  search-enabled: true;
   Adw.PreferencesPage {
     title: _("General");
 
@@ -9,6 +10,7 @@ template $LettersPreferencesWindow: Adw.PreferencesWindow {
       title: _("Document");
 
       Adw.ComboRow default_format_row {
+        use-underline: true;
         title: _("Default Format");
         subtitle: _("Default save format for new documents");
         model: StringList {
@@ -28,11 +30,13 @@ template $LettersPreferencesWindow: Adw.PreferencesWindow {
       title: _("Editor");
 
       Adw.EntryRow font_row {
+        use-underline: true;
         title: _("Font Family");
         text: "";
       }
 
       Adw.SpinRow editor_margin_row {
+        use-underline: true;
         title: _("Editor Margin (%)");
         subtitle: _("Left and right margin as percentage");
         adjustment: Adjustment {
@@ -52,12 +56,14 @@ template $LettersPreferencesWindow: Adw.PreferencesWindow {
       title: _("Tools");
 
       Adw.SwitchRow spell_check_row {
+        use-underline: true;
         title: _("Spell Checking");
         subtitle: _("Enable built-in spell checking");
         active: true;
       }
 
       Adw.SpinRow auto_save_row {
+        use-underline: true;
         title: _("Auto-Save Interval (s)");
         subtitle: _("Set to 0 to disable auto-save");
         adjustment: Adjustment {
@@ -77,6 +83,7 @@ template $LettersPreferencesWindow: Adw.PreferencesWindow {
       title: _("Layout");
 
       Adw.SwitchRow show_toolbar_row {
+        use-underline: true;
         title: _("Show Toolbar");
         subtitle: _("Show the formatting toolbar");
         active: true;

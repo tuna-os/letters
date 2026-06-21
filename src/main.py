@@ -41,7 +41,7 @@ class LettersApplication(Adw.Application):
 
         self.create_action('quit', self.close_windows, ['<primary>q'])
         self.create_action('about', self.on_about_action)
-        self.create_action('preferences', self.on_preferences_action)
+        self.create_action('preferences', self.on_preferences_action, ['<ctrl>comma'])
 
         self.create_action("new_window", lambda x,y: self.get_active_window().create_window(), ["<ctrl>n"])
         self.create_action("new", lambda x, y: self.get_active_window().new_file(None), ["<ctrl>t"])
