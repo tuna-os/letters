@@ -6,6 +6,7 @@ blueprints = custom_target('blueprints',
   input: files(
     'window.blp',
     'shortcuts-dialog.blp',
+    'preferences.blp',
   ),
   output: '.',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
@@ -41,6 +42,7 @@ letters_sources = [
   '__init__.py',
   'main.py',
   'window.py',
+  'preferences.py',
   'editor.js',
   'styles.css'
 ]

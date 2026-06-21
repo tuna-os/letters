@@ -19,6 +19,7 @@
 
 import gi
 gi.require_version('WebKit', '6.0')
+import gi.repository.Gdk as Gdk
 from gi.repository import Gio, Adw, Gtk, WebKit, GLib
 
 import os, tempfile
@@ -43,10 +44,52 @@ class LettersWindow(Adw.ApplicationWindow):
 
     FORCE_CLOSE = False
 
+    def show_toast(self, message, timeout=3):
+        """Show a non-blocking toast notification."""
+        toast = Adw.Toast.new(message)
+        toast.set_timeout(timeout)
+        if hasattr(self, 'tbview'):
+            self.tbview.add_toast(toast)
+
+    def show_error(self, heading, body):
+        """Show a modal error dialog."""
+        dialog = Adw.AlertDialog()
+        dialog.set_heading(heading)
+        dialog.set_body(body)
+        dialog.add_response("ok", _("OK"))
+        dialog.set_default_response("ok")
+        dialog.choose(self, None, None)
+
+    def set_busy_cursor(self, webview, busy):
+        """Set the cursor to busy/spinner during long operations."""
+        if busy:
+            cursor = Gdk.Cursor.new_from_name("progress")
+        else:
+            cursor = None
+        if webview:
+            webview.set_cursor(cursor)
+
     def __init__(self, opening_with_files = False, **kwargs):
         super().__init__(**kwargs)
 
+        # Load GSettings
+        app = self.get_application()
+        self._settings = app.settings if hasattr(app, 'settings') else None
+
+        # Restore window size from settings
+        if self._settings:
+            width = self._settings.get_int("window-width")
+            height = self._settings.get_int("window-height")
+            maximized = self._settings.get_boolean("window-maximized")
+            self.set_default_size(width, height)
+            if maximized:
+                self.maximize()
+            # Apply toolbar visibility
+            self.toolbar.set_visible(self._settings.get_boolean("show-toolbar"))
+
         self.connect("close-request", self.close_window)
+        self.connect("notify::default-width", self._on_window_size_changed)
+        self.connect("notify::default-height", self._on_window_size_changed)
 
         self.add_button.connect("clicked", self.new_file)
         self.tabview.connect("close-page", self.page_closing)
@@ -61,6 +104,12 @@ class LettersWindow(Adw.ApplicationWindow):
 
         if not opening_with_files:
             self.new_file()
+
+    def _on_window_size_changed(self, window, pspec):
+        """Save window size to settings when it changes."""
+        if self._settings and not self.is_maximized():
+            self._settings.set_int("window-width", self.get_default_size().width)
+            self._settings.set_int("window-height", self.get_default_size().height)
 
     # ---------------------------------- GTK/ FRONTEND RELATED FUNCTIONS ---------------------------
 
@@ -100,6 +149,7 @@ class LettersWindow(Adw.ApplicationWindow):
                     self.tbview.set_top_bar_style(Adw.ToolbarStyle.RAISED)
             except Exception as e:
                 print(e)
+                self.show_error(_("Error Opening File"), str(e))
         open_dialog = Gtk.FileDialog()
         open_dialog.open(self, None, open_callback, None)
         self.update_title()
@@ -238,6 +288,11 @@ class LettersWindow(Adw.ApplicationWindow):
         # Returns a WebKit.WebView() with style change handlers registered
         webview = WebKit.WebView()
 
+        # Apply spellcheck setting
+        if self._settings:
+            spellcheck = self._settings.get_boolean("spell-check-enabled")
+            webview.get_settings().set_enable_spell_checking(spellcheck)
+
         ucm = webview.get_user_content_manager()
         ucm.register_script_message_handler("styleChange")
         ucm.register_script_message_handler("inlineStyleChange")
@@ -254,18 +309,32 @@ class LettersWindow(Adw.ApplicationWindow):
             if not file.get_path().endswith(('.txt', '.html')):
                 try:
                     content = file.load_contents(None)[1]
-                    f = tempfile.NamedTemporaryFile("wb", suffix = file.get_basename())
-                    f.write(content)
-                    content = pypandoc.convert_file(f.name, 'html', extra_args=['--embed-resources', '--sandbox'])
+                    with tempfile.NamedTemporaryFile("wb", suffix=file.get_basename(), delete=False) as f:
+                        f.write(content)
+                        tmp_path = f.name
+                    self.set_busy_cursor(webview, True)
+                    content = pypandoc.convert_file(tmp_path, 'html', extra_args=['--embed-resources', '--sandbox'])
+                    self.set_busy_cursor(webview, False)
+                    try:
+                        os.unlink(tmp_path)
+                    except OSError:
+                        pass
                 except Exception as e:
+                    self.set_busy_cursor(webview, False)
                     print(e)
+                    self.show_error(_("Error Loading File"), str(e))
                     content = f"<p>Error loading file: {e}</p>"
             else:
                 try:
                     content = file.load_contents(None)[1]
-                    f = tempfile.NamedTemporaryFile("wb", suffix = file.get_basename())
-                    f.write(content)
+                    with tempfile.NamedTemporaryFile("wb", suffix=file.get_basename(), delete=False) as f:
+                        f.write(content)
+                        tmp_path = f.name
                     content = content.decode()
+                    try:
+                        os.unlink(tmp_path)
+                    except OSError:
+                        pass
                 except Exception as e:
                     print(e)
         else:
@@ -369,19 +438,25 @@ class LettersWindow(Adw.ApplicationWindow):
                 if ext not in ['odt', 'docx', 'rtf', 'txt', 'md', 'html']:
                     ext = "odt"
                 try:
+                    self.set_busy_cursor(webview, True)
                     pypandoc.convert_text(content, ext, format='html', outputfile=webview.file.get_path(), extra_args=['--embed-resources', '--sandbox'])
+                    self.set_busy_cursor(webview, False)
 
                     page.set_needs_attention(False)
                     page.set_title(webview.file.get_basename())
                     self.update_title()
+                    self.show_toast(_("Document saved"), 2)
                     if page.closing_after_save:
                         self.tabview.close_page_finish(page, True)
                         webview.terminate_web_process()
                 except Exception as e:
-                    print(_("Error saving file: "), e)
+                    self.set_busy_cursor(webview, False)
+                    print("Error saving file: ", e)
+                    self.show_error(_("Error Saving File"), str(e))
                     self.tabview.close_page_finish(page, False)
             except Exception as e:
-                print(_("Error saving file: "), e)
+                print("Error saving file: ", e)
+                self.show_error(_("Error Saving File"), str(e))
                 self.tabview.close_page_finish(page, False)
 
         webview.evaluate_javascript("document.documentElement.outerHTML", -1, None, None, None, output_callback)
@@ -427,11 +502,13 @@ class LettersWindow(Adw.ApplicationWindow):
                 font_css = ":root {color-scheme: light dark} body {font-family: \"" + settings.get_property('gtk-font-name').rstrip(' 0123456789') + "\"}"
                 try:
                     weasyprint.HTML(string=content).write_pdf(file.get_path(), stylesheets=[weasyprint.CSS(string=css), weasyprint.CSS(string=font_css)])
-
+                    self.show_toast(_("PDF exported"), 2)
                 except Exception as e:
-                    print(_("Error exporting file: "), e)
+                    print("Error exporting file: ", e)
+                    self.show_error(_("Error Exporting File"), str(e))
             except Exception as e:
-                print(_("Error exporting file: "), e)
+                print("Error exporting file: ", e)
+                self.show_error(_("Error Exporting File"), str(e))
 
         webview.evaluate_javascript("document.documentElement.outerHTML", -1, None, None, None, output_callback)
 
@@ -447,10 +524,20 @@ class LettersWindow(Adw.ApplicationWindow):
             self.run_js(webview, js_code)
             self.run_js(webview, "loadCSS(\"styles.css\")")
 
-            settings = Gtk.Settings.get_default()
-            font = settings.get_property('gtk-font-name').rstrip(' 0123456789')
+            # Determine font from GSettings or GTK default
+            font = None
+            if self._settings:
+                font = self._settings.get_string("font")
+            if not font:
+                gtk_settings = Gtk.Settings.get_default()
+                font = gtk_settings.get_property('gtk-font-name').rstrip(' 0123456789')
 
-            style_sheet = WebKit.UserStyleSheet(":root {color-scheme: light dark} body {font-family: \"" + font + "\"; margin-left:16%; margin-right:16%;}", 0, 0, None, None)
+            # Determine margin from GSettings (default 16%)
+            margin = 16
+            if self._settings:
+                margin = int(self._settings.get_double("editor-margin"))
+
+            style_sheet = WebKit.UserStyleSheet(f":root {{color-scheme: light dark}} body {{font-family: \"{font}\"; margin-left:{margin}%; margin-right:{margin}%;}}", 0, 0, None, None)
             webview.get_user_content_manager().add_style_sheet(style_sheet)
 
             cursor_js = """

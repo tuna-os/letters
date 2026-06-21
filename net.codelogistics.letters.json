@@ -1,7 +1,7 @@
 {
     "id" : "net.codelogistics.letters",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "49",
+    "runtime-version" : "50",
     "sdk" : "org.gnome.Sdk",
     "command" : "letters",
     "finish-args" : [
@@ -9,7 +9,8 @@
         "--socket=fallback-x11",
         "--device=dri",
         "--socket=wayland",
-        "--metadata=X-Flatpak-MimeType=text/plain;application/json;image/png;"
+        "--filesystem=host",
+        "--metadata=X-Flatpak-MimeType=text/plain;application/json;image/png;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.oasis.opendocument.text;text/markdown"
     ],
     "cleanup" : [
         "/include",
@@ -36,8 +37,8 @@
                     "only-arches": [
                         "x86_64"
                     ],
-                    "url": "https://github.com/jgm/pandoc/releases/download/3.6.4/pandoc-3.6.4-linux-amd64.tar.gz",
-                    "sha256": "5def6e1ff535e397becce292ee97767a947306150b9fb1488003b67ac3417c5e",
+                    "url": "https://github.com/jgm/pandoc/releases/download/3.10/pandoc-3.10-linux-amd64.tar.gz",
+                    "sha256": "e0f8af62d0f267d22baa5bcefe6d5dda3a097ccc60de794b759fe03159923244",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 2589,
@@ -50,8 +51,8 @@
                     "only-arches": [
                         "aarch64"
                     ],
-                    "url": "https://github.com/jgm/pandoc/releases/download/3.6.4/pandoc-3.6.4-linux-arm64.tar.gz",
-                    "sha256": "ad5cf63fe0420388d9ec513f02d03e061477b786d11a328164dce8ad7387b8bd",
+                    "url": "https://github.com/jgm/pandoc/releases/download/3.10/pandoc-3.10-linux-arm64.tar.gz",
+                    "sha256": "55413dfb0c1aec861641fe858f1f73e84848f3db497b1c0c02e62887ea76f4a4",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 2589,
@@ -70,8 +71,8 @@
 	    "sources": [
 		{
 		    "type": "file",
-		    "url": "https://files.pythonhosted.org/packages/61/06/0763e0ccc81754d3eadb21b2cb86cf21bdedc9b52698c2ad6785db7f0a4e/pypandoc-1.15-py3-none-any.whl",
-		    "sha256": "4ededcc76c8770f27aaca6dff47724578428eca84212a31479403a9731fc2b16"
+		    "url": "https://files.pythonhosted.org/packages/0c/86/e2ffa604eacfbec3f430b1d850e7e04c4101eca1a5828f9ae54bf51dfba4/pypandoc-1.17-py3-none-any.whl",
+		    "sha256": "01fdbffa61edb9f8e82e8faad6954efcb7b6f8f0634aead4d89e322a00225a67"
 		}
 	    ]
 	},
@@ -85,8 +86,8 @@
 	    "sources": [
 		{
 		    "type": "file",
-		    "url": "https://files.pythonhosted.org/packages/2f/c2/f9e977608bdf958650638c3f1e28f85a1b075f075ebbe77db8555463787b/Brotli-1.1.0.tar.gz",
-		    "sha256": "81de08ac11bcb85841e440c13611c00b67d3bf82698314928d0b676362546724"
+		    "url": "https://files.pythonhosted.org/packages/f7/16/c92ca344d646e71a43b8bb353f0a6490d7f6e06210f8554c8f874e454285/brotli-1.2.0.tar.gz",
+		    "sha256": "e310f77e41941c13340a95976fe66a8a95b01e783d430eeaf7a2f87e0a57dd0a"
 		},
 		{
 		    "type": "file",
@@ -100,23 +101,23 @@
 		},
 		{
 		    "type": "file",
-		    "url": "https://files.pythonhosted.org/packages/4b/42/97a13e47a1e51a5a7142475bbcf5107fe3a68fc34aef331c897d5fb98ad0/fonttools-4.60.1.tar.gz",
-		    "sha256": "ef00af0439ebfee806b25f24c8f92109157ff3fac5731dc7867957812e87b8d9"
+		    "url": "https://files.pythonhosted.org/packages/4b/42/97a13e47a1e51a5a7142475bbcf5107fe3a68fc34aef331c897d5fb98ad0/fonttools-4.63.0.tar.gz",
+		    "sha256": "caeb583deeb5168e694b65cda8b4ee62abedfa66cf88488734466f2366b9c4e0"
 		},
 		{
 		    "type": "file",
-		    "url": "https://files.pythonhosted.org/packages/f3/0d/d0d6dea55cd152ce3d6767bb38a8fc10e33796ba4ba210cbab9354b6d238/pillow-11.3.0.tar.gz",
-		    "sha256": "3828ee7586cd0b2091b6209e5ad53e20d0649bbe87164a459d0676e035e8f523"
+		    "url": "https://files.pythonhosted.org/packages/f3/0d/d0d6dea55cd152ce3d6767bb38a8fc10e33796ba4ba210cbab9354b6d238/pillow-12.2.0.tar.gz",
+		    "sha256": "a830b1a40919539d07806aa58e1b114df53ddd43213d9c8b75847eee6c0182b5"
 		},
 		{
 		    "type": "file",
-		    "url": "https://files.pythonhosted.org/packages/a0/e3/59cd50310fc9b59512193629e1984c1f95e5c8ae6e5d8c69532ccc65a7fe/pycparser-2.23-py3-none-any.whl",
-		    "sha256": "e5c6e8d3fbad53479cab09ac03729e0a9faf2bee3db8208a550daf5af81a5934"
+		    "url": "https://files.pythonhosted.org/packages/a0/e3/59cd50310fc9b59512193629e1984c1f95e5c8ae6e5d8c69532ccc65a7fe/pycparser-3.0-py3-none-any.whl",
+		    "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992"
 		},
 		{
 		    "type": "file",
-		    "url": "https://files.pythonhosted.org/packages/c9/ac/d5db977deaf28c6ecbc61bbca269eb3e8f0b3a1f55c8549e5333e606e005/pydyf-0.11.0-py3-none-any.whl",
-		    "sha256": "0aaf9e2ebbe786ec7a78ec3fbffa4cdcecde53fd6f563221d53c6bc1328848a3"
+		    "url": "https://files.pythonhosted.org/packages/c9/ac/d5db977deaf28c6ecbc61bbca269eb3e8f0b3a1f55c8549e5333e606e005/pydyf-0.12.1-py3-none-any.whl",
+		    "sha256": "ea25b4e1fe7911195cb57067560daaa266639184e8335365cc3ee5214e7eaadc"
 		},
 		{
 		    "type": "file",
@@ -125,18 +126,13 @@
 		},
 		{
 		    "type": "file",
-		    "url": "https://files.pythonhosted.org/packages/e6/34/ebdc18bae6aa14fbee1a08b63c015c72b64868ff7dae68808ab500c492e2/tinycss2-1.4.0-py3-none-any.whl",
-		    "sha256": "3a49cf47b7675da0b15d0c6e1df8df4ebd96e9394bb905a5775adb0d884c5289"
+		    "url": "https://files.pythonhosted.org/packages/60/45/c7b5c3168458db837e8ceab06dc77824e18202679d0463f0e8f002143a97/tinycss2-1.5.1-py3-none-any.whl",
+		    "sha256": "3415ba0f5839c062696996998176c4a3751d18b7edaaeeb658c9ce21ec150661"
 		},
 		{
 		    "type": "file",
 		    "url": "https://files.pythonhosted.org/packages/5c/de/27c57899297163a4a84104d5cec0af3b1ac5faf62f44667e506373c6b8ce/tinyhtml5-2.0.0-py3-none-any.whl",
 		    "sha256": "13683277c5b176d070f82d099d977194b7a1e26815b016114f581a74bbfbf47e"
-		},
-		{
-		    "type": "file",
-		    "url": "https://files.pythonhosted.org/packages/0f/d1/c5d9b341bf3d556c1e4c6566b3efdda0b1bb175510aa7b09dd3eee246923/weasyprint-66.0-py3-none-any.whl",
-		    "sha256": "82b0783b726fcd318e2c977dcdddca76515b30044bc7a830cc4fbe717582a6d0"
 		},
 		{
 		    "type": "file",
@@ -158,6 +154,11 @@
                     ],
 		    "url": "https://files.pythonhosted.org/packages/9e/91/89f07c8ea3c9bc64099b3461627b07a8384302235ee0f357eaa86f98f509/zopfli-0.2.3.post1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
 		    "sha256": "6617fb10f9e4393b331941861d73afb119cd847e88e4974bdbe8068ceef3f73f"
+		},
+		{
+		    "type": "file",
+		    "url": "https://files.pythonhosted.org/packages/0f/d1/c5d9b341bf3d556c1e4c6566b3efdda0b1bb175510aa7b09dd3eee246923/weasyprint-69.0-py3-none-any.whl",
+		    "sha256": "475951cfd917014de6d4d005caff48c6aa867e7e42b80cd5b16a0484a1609ee6"
 		}
 	    ]
 	},
@@ -168,7 +169,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "file:///home/satvikp/Projects"
+                    "url" : "https://github.com/hanthor/letters"
                 }
             ]
         }

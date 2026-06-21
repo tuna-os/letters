@@ -1,0 +1,86 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $LettersPreferencesWindow: Adw.PreferencesWindow {
+  Adw.PreferencesPage {
+    title: _("General");
+
+    Adw.PreferencesGroup {
+      title: _("Document");
+
+      Adw.ComboRow default_format_row {
+        title: _("Default Format");
+        subtitle: _("Default save format for new documents");
+        model: StringList {
+          strings [
+            _("ODT (OpenDocument)"),
+            _("DOCX (Office Open XML)"),
+            _("Markdown"),
+            _("HTML"),
+            _("Plain Text"),
+            _("RTF (Rich Text)")
+          ]
+        };
+      }
+    }
+
+    Adw.PreferencesGroup {
+      title: _("Editor");
+
+      Adw.EntryRow font_row {
+        title: _("Font Family");
+        text: "";
+      }
+
+      Adw.SpinRow editor_margin_row {
+        title: _("Editor Margin (%)");
+        subtitle: _("Left and right margin as percentage");
+        adjustment: Adjustment {
+          lower: 0;
+          upper: 50;
+          step-increment: 1;
+          value: 16;
+        };
+      }
+    }
+  }
+
+  Adw.PreferencesPage {
+    title: _("Editing");
+
+    Adw.PreferencesGroup {
+      title: _("Tools");
+
+      Adw.SwitchRow spell_check_row {
+        title: _("Spell Checking");
+        subtitle: _("Enable built-in spell checking");
+        active: true;
+      }
+
+      Adw.SpinRow auto_save_row {
+        title: _("Auto-Save Interval (s)");
+        subtitle: _("Set to 0 to disable auto-save");
+        adjustment: Adjustment {
+          lower: 0;
+          upper: 3600;
+          step-increment: 30;
+          value: 0;
+        };
+      }
+    }
+  }
+
+  Adw.PreferencesPage {
+    title: _("Appearance");
+
+    Adw.PreferencesGroup {
+      title: _("Layout");
+
+      Adw.SwitchRow show_toolbar_row {
+        title: _("Show Toolbar");
+        subtitle: _("Show the formatting toolbar");
+        active: true;
+      }
+    }
+  }
+}

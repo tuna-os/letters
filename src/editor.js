@@ -1,28 +1,182 @@
-/* -------------------- Formatting Commands -------------------- */
+/* ==================== Custom Undo/Redo Stack ==================== */
+const undoStack = [];
+const redoStack = [];
+const MAX_UNDO = 50;
+let undoCooldown = false;
+
+function saveUndoState() {
+  if (undoCooldown) return;
+  undoStack.push(editor.innerHTML);
+  if (undoStack.length > MAX_UNDO) undoStack.shift();
+  redoStack.length = 0;
+}
+
+function undo() {
+  if (undoStack.length === 0) return;
+  redoStack.push(editor.innerHTML);
+  const state = undoStack.pop();
+  undoCooldown = true;
+  editor.innerHTML = state;
+  // Restore cursor
+  const sel = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(editor);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+  setTimeout(() => { undoCooldown = false; }, 50);
+}
+
+function redo() {
+  if (redoStack.length === 0) return;
+  undoStack.push(editor.innerHTML);
+  const state = redoStack.pop();
+  undoCooldown = true;
+  editor.innerHTML = state;
+  const sel = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(editor);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+  setTimeout(() => { undoCooldown = false; }, 50);
+}
+
+/* ==================== DOM-based Inline Formatting ==================== */
+
+function toggleInlineFormat(tagName) {
+  if (!editor) return;
+
+  const sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) {
+    // No selection — insert empty formatting toggles (like execCommand does)
+    document.execCommand(tagName === 'STRONG' ? 'bold' :
+                         tagName === 'EM' ? 'italic' :
+                         tagName === 'U' ? 'underline' :
+                         tagName === 'S' ? 'strikeThrough' : '', false, null);
+    return;
+  }
+
+  saveUndoState();
+  const range = sel.getRangeAt(0);
+
+  // Check if selection is already wrapped in this tag
+  let node = range.commonAncestorContainer;
+  if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+
+  let found = false;
+  let check = node;
+  while (check && check !== editor) {
+    if (check.tagName === tagName) {
+      found = true;
+      break;
+    }
+    check = check.parentElement;
+  }
+
+  if (found) {
+    // Unwrap: move children up and remove the wrapper
+    const parent = check.parentElement;
+    while (check.firstChild) {
+      parent.insertBefore(check.firstChild, check);
+    }
+    parent.removeChild(check);
+  } else {
+    // Wrap selection in the tag
+    const wrapper = document.createElement(tagName);
+    try {
+      range.surroundContents(wrapper);
+    } catch (e) {
+      // surroundContents fails if the range spans multiple elements
+      // Fall back to execCommand
+      const cmd = tagName === 'STRONG' ? 'bold' :
+                  tagName === 'EM' ? 'italic' :
+                  tagName === 'U' ? 'underline' : 'strikeThrough';
+      document.execCommand(cmd, false, null);
+    }
+  }
+
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+/* ==================== Formatting Commands ==================== */
 const formatting = {
-  bold:   () => document.execCommand('bold'),
-  italic: () => document.execCommand('italic'),
-  underline: () => document.execCommand('underline'),
-  strikethrough: () => document.execCommand('strikeThrough'),
-  indent: () => document.execCommand('indent'),
-  outdent: () => document.execCommand('outdent'),
+  bold:   () => { toggleInlineFormat('STRONG'); notifyGTKInlineStyles(); },
+  italic: () => { toggleInlineFormat('EM'); notifyGTKInlineStyles(); },
+  underline: () => { toggleInlineFormat('U'); notifyGTKInlineStyles(); },
+  strikethrough: () => { toggleInlineFormat('S'); notifyGTKInlineStyles(); },
+  indent: () => { document.execCommand('indent'); },
+  outdent: () => { document.execCommand('outdent'); },
   highlight: () => {
-    const isHighlighted = document.queryCommandValue('backColor') === 'rgb(255, 255, 0)' || document.queryCommandValue('backColor') === '#ffff00';
+    saveUndoState();
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) return;
+    const range = sel.getRangeAt(0);
+
+    // Check if selection already has yellow background
+    let parent = range.commonAncestorContainer;
+    if (parent.nodeType === Node.TEXT_NODE) parent = parent.parentElement;
+    let isHighlighted = false;
+    let hlNode = parent;
+    while (hlNode && hlNode !== editor) {
+      if (hlNode.style && hlNode.style.backgroundColor === 'yellow') {
+        isHighlighted = true;
+        break;
+      }
+      hlNode = hlNode.parentElement;
+    }
 
     if (isHighlighted) {
-      document.execCommand('backColor', false, 'transparent');
+      hlNode.style.backgroundColor = 'transparent';
     } else {
-      const color = 'yellow';
-      document.execCommand('backColor', false, color);
+      const span = document.createElement('span');
+      span.style.backgroundColor = 'yellow';
+      try {
+        range.surroundContents(span);
+      } catch (e) {
+        document.execCommand('backColor', false, 'yellow');
+      }
     }
   },
   createLink: () => {
     const url = prompt('Enter link URL');
-    if (url) document.execCommand('createLink', false, url);
+    if (!url) return;
+    saveUndoState();
+    const sel = window.getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) {
+      // No selection, insert a named link
+      const text = prompt('Enter link text:');
+      if (!text) return;
+      const a = document.createElement('a');
+      a.href = url;
+      a.textContent = text;
+      a.target = '_blank';
+      const range = sel.getRangeAt(0);
+      range.insertNode(a);
+      range.setStartAfter(a);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else {
+      const range = sel.getRangeAt(0);
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      try {
+        range.surroundContents(a);
+      } catch (e) {
+        document.execCommand('createLink', false, url);
+      }
+    }
   }
 };
 
-/* -------------------- Dynamic CSS Loader -------------------- */
+/* ==================== Undo/Redo exposed for GTK ==================== */
+/* main.py calls: document.execCommand('undo') and document.execCommand('redo') */
+/* We override those by mapping undo/redo actions in main.py to window.undo()/window.redo() */
+
+/* ==================== Dynamic CSS Loader ==================== */
 function loadCSS(filename) {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
@@ -30,10 +184,10 @@ function loadCSS(filename) {
   document.head.appendChild(link);
 }
 
-/* -------------------- Editor Reference -------------------- */
+/* ==================== Editor Reference ==================== */
 const editor = document.querySelector('[contenteditable="true"]');
 
-/* -------------------- Apply Styles -------------------- */
+/* ==================== Apply Styles (DOM-based) ==================== */
 function applyStyle(style) {
   if (!editor) return;
 
@@ -58,10 +212,22 @@ function applyStyle(style) {
     return;
   }
 
-  /* We are completely fucked when WebKit removes support for document.execCommand :D */
-  /* DOM manipulation doesn't affect the undo stack*/
-  /* Maybe a custom undo redo stack can be made. Will be bad for memory though.*/
-  document.execCommand('formatBlock', false, style);
+  saveUndoState();
+
+  // DOM-based formatBlock replacement
+  const newBlock = document.createElement(style);
+  while (block.firstChild) {
+    newBlock.appendChild(block.firstChild);
+  }
+  block.parentNode.replaceChild(newBlock, block);
+
+  // Place cursor inside the new block
+  const sel = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(newBlock);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
 
   notifyGTKStyleChange();
 }
@@ -72,7 +238,7 @@ function isBlockElement(elem) {
   return blockTags.includes(elem.tagName);
 }
 
-/* -------------------- Report Current Style to GTK -------------------- */
+/* ==================== Report Current Style to GTK ==================== */
 function getCurrentStyle() {
   const selection = window.getSelection();
   if (!selection.rangeCount) return null;
@@ -103,9 +269,8 @@ function getInlineStyles() {
     italic: false,
     bold: false,
     underline: false,
-    strikeout: false, // New property
+    strikeout: false,
     list: false
-    // Highlight state is omitted due to the complexity of tracking style="background-color:..."
   };
 
   while (node && node !== editor) {
@@ -123,7 +288,6 @@ function getInlineStyles() {
       styles.underline = true;
     }
 
-    // Check for strikeout tags (<s> or <del>)
     if (!styles.strikeout && (tag === 's' || tag === 'del')) {
       styles.strikeout = true;
     }
@@ -137,7 +301,8 @@ function getInlineStyles() {
 
   return styles;
 }
-/* -------------------- Notify GTK -------------------- */
+
+/* ==================== Notify GTK ==================== */
 function notifyGTKStyleChange() {
   const style = getCurrentStyle();
   if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.styleChange) {
@@ -168,7 +333,6 @@ function applyStyleFromGTK(style) {
 
   let timeout;
   const observer = new MutationObserver(() => {
-    // debounce so we don’t spam GTK while typing
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       if (window.webkit.messageHandlers.contentChanged) {
@@ -184,8 +348,164 @@ function applyStyleFromGTK(style) {
   });
 })();
 
-/* -------------------- Track Cursor Movement -------------------- */
-editor.addEventListener('keyup', () => {
+/* ==================== Markdown Shortcuts ==================== */
+
+function makeLink(text, url) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.textContent = text;
+  a.target = '_blank';
+  return a;
+}
+
+function handleInlineMarkdown() {
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  const range = sel.getRangeAt(0);
+  const node = range.startContainer;
+  if (node.nodeType !== Node.TEXT_NODE || !node.textContent) return;
+
+  const text = node.textContent;
+  const pos = range.startOffset;
+
+  const beforeCursor = text.substring(0, pos);
+  const trimmed = beforeCursor.replace(/ $/, '');
+
+  const inlinePatterns = [
+    { regex: /\[([^\]]+)\]\(([^)]+)\)$/g, handler: makeLink },
+    { regex: /\*\*(.+?)\*\*$/g,   tag: 'strong' },
+    { regex: /__(.+?)__$/g,         tag: 'strong' },
+    { regex: /\*(.+?)\*$/g,        tag: 'em' },
+    { regex: /_(.+?)_$/g,           tag: 'em' },
+    { regex: /~~(.+?)~~$/g,         tag: 's' },
+    { regex: /`(.+?)`$/g,           tag: 'code' },
+  ];
+
+  for (const pattern of inlinePatterns) {
+    const match = trimmed.match(pattern.regex);
+    if (!match) continue;
+
+    const fullMatch = match[0];
+    const innerText = match[1];
+
+    let parent = node.parentElement;
+    while (parent && parent !== editor) {
+      const tag = parent.tagName.toLowerCase();
+      if (tag === 'code' || tag === 'a' || tag === 'pre') return;
+      parent = parent.parentElement;
+    }
+
+    saveUndoState();
+
+    const before = text.substring(0, pos - fullMatch.length - 1);
+    const after = text.substring(pos);
+
+    let replacementNode;
+    if (pattern.handler) {
+      const url = match[2];
+      replacementNode = pattern.handler(innerText, url);
+    } else {
+      const wrapper = document.createElement(pattern.tag);
+      wrapper.textContent = innerText;
+      replacementNode = wrapper;
+    }
+
+    const space = document.createTextNode(' ');
+
+    node.textContent = before;
+    node.parentNode.insertBefore(replacementNode, node.nextSibling);
+    node.parentNode.insertBefore(space, node.nextSibling);
+
+    const newRange = document.createRange();
+    newRange.setStartAfter(space);
+    newRange.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(newRange);
+
+    notifyGTKInlineStyles();
+    return;
+  }
+}
+
+function handleBlockMarkdown() {
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+
+  let node = sel.anchorNode;
+  if (!node) return;
+
+  if (node.nodeType === Node.TEXT_NODE) {
+    node = node.parentNode;
+  }
+
+  let block = node;
+  while (block && block !== editor && !isBlockElement(block)) {
+    block = block.parentNode;
+  }
+  if (!block || block === editor) return;
+
+  const text = block.textContent || '';
+
+  const headingMatch = text.match(/^(#{1,6})\s+(.+)/);
+  if (headingMatch) {
+    const level = headingMatch[1].length;
+    const content = headingMatch[2];
+    saveUndoState();
+    const newBlock = document.createElement(`h${level}`);
+    newBlock.textContent = content;
+    block.parentNode.replaceChild(newBlock, block);
+    placeCursorAtEnd(newBlock);
+    notifyGTKStyleChange();
+    return;
+  }
+
+  if (/^>\s+(.+)/.test(text)) {
+    const content = text.replace(/^>\s+/, '');
+    saveUndoState();
+    const newBlock = document.createElement('blockquote');
+    newBlock.textContent = content;
+    block.parentNode.replaceChild(newBlock, block);
+    placeCursorAtEnd(newBlock);
+    notifyGTKStyleChange();
+    return;
+  }
+
+  if (/^[-*]\s+(.+)/.test(text)) {
+    block.innerHTML = text.replace(/^[-*]\s+/, '');
+    document.execCommand('insertUnorderedList');
+    notifyGTKStyleChange();
+    return;
+  }
+
+  if (/^\d+\.\s+(.+)/.test(text)) {
+    block.innerHTML = text.replace(/^\d+\.\s+/, '');
+    document.execCommand('insertOrderedList');
+    notifyGTKStyleChange();
+    return;
+  }
+}
+
+function placeCursorAtEnd(el) {
+  const sel = window.getSelection();
+  const range = document.createRange();
+  if (el.childNodes.length) {
+    range.setStartAfter(el.lastChild);
+  } else {
+    range.selectNodeContents(el);
+  }
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+/* ==================== Track Cursor Movement ==================== */
+editor.addEventListener('keyup', (e) => {
+  if (e.key === ' ') {
+    handleInlineMarkdown();
+  }
+  if (e.key === 'Enter') {
+    handleBlockMarkdown();
+  }
   notifyGTKStyleChange();
   notifyGTKInlineStyles();
 });
@@ -205,7 +525,7 @@ editor.addEventListener('focus', () => {
   notifyGTKInlineStyles();
 });
 
-/* -------------------- Image Handling -------------------- */
+/* ==================== Image Handling ==================== */
 function insertImage() {
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
@@ -221,13 +541,26 @@ function insertImage() {
       const base64Data = event.target.result;
       const imgId = 'img-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
 
-      const imgHTML = `<img src="${base64Data}" data-img-id="${imgId}">`;
-      document.execCommand('insertHTML', false, imgHTML);
+      const img = document.createElement('img');
+      img.src = base64Data;
+      img.dataset.imgId = imgId;
+
+      saveUndoState();
+
+      const sel = window.getSelection();
+      if (sel.rangeCount) {
+        const range = sel.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(img);
+        range.setStartAfter(img);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } else {
+        editor.appendChild(img);
+      }
 
       setTimeout(() => {
-        const img = document.querySelector(`img[data-img-id="${imgId}"]`);
-        if (!img) return;
-
         resizeImageIfTooTall(img);
       }, 0);
     };
@@ -273,29 +606,24 @@ function resizeImg(img) {
   img.style.width = img.naturalWidth * scale + "px";
 }
 
-/* -------------------- Bootstrap Existing Images -------------------- */
 function bootstrapExistingImages() {
   editor.querySelectorAll('img').forEach(resizeImageIfTooTall);
 }
 
 bootstrapExistingImages();
 
-/* -------------------- Page Printing --------------------*/
+/* ==================== Page Printing ====================*/
 function printPage() {
   if (!editor) {
     window.print();
     return;
   }
 
-  // 1. Disable editing to hide the caret and focus styles
   editor.setAttribute('contenteditable', 'false');
 
-  // 2. Trigger the print dialog
   window.print();
 
-  // 3. Use a timeout to wait a very short period, then re-enable editing
-  // This allows the browser time to queue the print job before changing the DOM.
   setTimeout(() => {
     editor.setAttribute('contenteditable', 'true');
-  }, 500); // 500ms should be safe
+  }, 500);
 }

@@ -25,6 +25,7 @@ gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio, Adw, GLib
 from .window import LettersWindow
+from .preferences import LettersPreferencesWindow
 import os, sys
 
 class LettersApplication(Adw.Application):
@@ -34,6 +35,9 @@ class LettersApplication(Adw.Application):
         super().__init__(application_id='net.codelogistics.letters',
                          flags=Gio.ApplicationFlags.HANDLES_OPEN,
                          resource_base_path='/net/codelogistics/letters')
+
+        # Load GSettings
+        self.settings = Gio.Settings(schema_id='net.codelogistics.letters')
 
         self.create_action('quit', self.close_windows, ['<primary>q'])
         self.create_action('about', self.on_about_action)
@@ -47,8 +51,8 @@ class LettersApplication(Adw.Application):
         self.create_action("save_as", lambda x, y: self.get_active_window().save_as(x,y), ["<ctrl><shift>s"])
         self.create_action("print", lambda x, y: self.get_active_window().print(x,y), ["<ctrl>p"])
         self.create_action("export", lambda x, y: self.get_active_window().export(x,y))
-        self.create_action("undo", lambda x, y: self.get_active_window().run_js(None, "document.execCommand('undo')"), ["<ctrl>z"])
-        self.create_action("redo", lambda x, y: self.get_active_window().run_js(None, "document.execCommand('redo')"), ["<ctrl>y"])
+        self.create_action("undo", lambda x, y: self.get_active_window().run_js(None, "undo()"), ["<ctrl>z"])
+        self.create_action("redo", lambda x, y: self.get_active_window().run_js(None, "redo()"), ["<ctrl>y"])
         self.create_action("underline", lambda x, y: self.get_active_window().run_js(None, "formatting.underline()"), ["<ctrl>u"])
         self.create_action("insertlink", lambda x, y: self.get_active_window().run_js(None, "formatting.createLink()"), ["<ctrl>k"])
         self.create_action("insertimage", lambda x, y: self.get_active_window().run_js(None, "insertImage()"))
@@ -58,6 +62,8 @@ class LettersApplication(Adw.Application):
         self.create_action("highlight", lambda x, y: self.get_active_window().run_js(None, "formatting.highlight()"))
         self.create_action("indent", lambda x, y: self.get_active_window().run_js(None, "formatting.indent()"))
         self.create_action("outdent", lambda x, y: self.get_active_window().run_js(None, "formatting.outdent()"))
+        self.create_action("shortcuts", self.on_shortcuts_action)
+
         self.files = []
         self.connect("open", self.open_files)
 
@@ -96,7 +102,18 @@ class LettersApplication(Adw.Application):
 
     def on_preferences_action(self, widget, _):
         """Callback for the app.preferences action."""
-        print('app.preferences action activated')
+        win = LettersPreferencesWindow(settings=self.settings)
+        win.set_transient_for(self.props.active_window)
+        win.present()
+
+    def on_shortcuts_action(self, widget, _):
+        """Callback for the app.shortcuts action."""
+        from gi.repository import Adw
+        shortcuts = Adw.ShortcutsDialog.new()
+        # The dialog is loaded from the GResource via its UI file
+        # which is included in the compiled resources
+        shortcuts.set_transient_for(self.props.active_window)
+        shortcuts.present()
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.

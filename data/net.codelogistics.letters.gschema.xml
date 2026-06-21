@@ -1,5 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="letters">
-	<schema id="net.codelogistics.letters" path="/net/codelogistics/letters/">
-	</schema>
+  <schema id="net.codelogistics.letters" path="/net/codelogistics/letters/">
+    <key name="font" type="s">
+      <default>""</default>
+      <summary>Default font family</summary>
+      <description>The font family to use in the editor. If empty, the system GTK font is used.</description>
+    </key>
+    <key name="editor-margin" type="d">
+      <range min="0" max="50"/>
+      <default>16</default>
+      <summary>Editor margin percentage</summary>
+      <description>Left and right margin as a percentage of the editor width.</description>
+    </key>
+    <key name="spell-check-enabled" type="b">
+      <default>true</default>
+      <summary>Enable spell checking</summary>
+      <description>Whether to enable WebKit built-in spell checking.</description>
+    </key>
+    <key name="auto-save-interval" type="i">
+      <range min="0" max="3600"/>
+      <default>0</default>
+      <summary>Auto-save interval in seconds</summary>
+      <description>Automatically save the current document every N seconds. Set to 0 to disable.</description>
+    </key>
+    <key name="show-toolbar" type="b">
+      <default>true</default>
+      <summary>Show formatting toolbar</summary>
+      <description>Whether to show the formatting toolbar by default.</description>
+    </key>
+    <key name="default-format" type="s">
+      <choices>
+        <choice value="odt"/>
+        <choice value="docx"/>
+        <choice value="md"/>
+        <choice value="html"/>
+        <choice value="txt"/>
+        <choice value="rtf"/>
+      </choices>
+      <default>"odt"</default>
+      <summary>Default save format</summary>
+      <description>The default format for new documents.</description>
+    </key>
+    <key name="window-width" type="i">
+      <range min="400" max="99999"/>
+      <default>800</default>
+      <summary>Window width</summary>
+      <description>The saved window width for restoring window size.</description>
+    </key>
+    <key name="window-height" type="i">
+      <range min="300" max="99999"/>
+      <default>600</default>
+      <summary>Window height</summary>
+      <description>The saved window height for restoring window size.</description>
+    </key>
+    <key name="window-maximized" type="b">
+      <default>false</default>
+      <summary>Window maximized</summary>
+      <description>Whether the window is maximized.</description>
+    </key>
+  </schema>
 </schemalist>
