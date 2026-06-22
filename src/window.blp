@@ -123,6 +123,48 @@ template $LettersWindow: Adw.ApplicationWindow {
               label: _("Paragraph Style");
             }
           }
+
+          Separator {}
+
+          ToggleButton {
+            icon-name: "format-justify-left-symbolic";
+            action-name: "app.align-left";
+            tooltip-text: _("Align Left");
+            accessibility { label: _("Align Left"); }
+          }
+          ToggleButton {
+            icon-name: "format-justify-center-symbolic";
+            action-name: "app.align-center";
+            tooltip-text: _("Align Center");
+            accessibility { label: _("Align Center"); }
+          }
+          ToggleButton {
+            icon-name: "format-justify-right-symbolic";
+            action-name: "app.align-right";
+            tooltip-text: _("Align Right");
+            accessibility { label: _("Align Right"); }
+          }
+          ToggleButton {
+            icon-name: "format-justify-fill-symbolic";
+            action-name: "app.align-justify";
+            tooltip-text: _("Justify");
+            accessibility { label: _("Justify"); }
+          }
+
+          Separator {}
+
+          Button {
+            icon-name: "font-size-increase-symbolic";
+            action-name: "app.increase-font";
+            tooltip-text: _("Increase Font Size");
+            accessibility { label: _("Increase Font Size"); }
+          }
+          Button {
+            icon-name: "font-size-decrease-symbolic";
+            action-name: "app.decrease-font";
+            tooltip-text: _("Decrease Font Size");
+            accessibility { label: _("Decrease Font Size"); }
+          }
         }
 
         MenuButton toolbar_more {

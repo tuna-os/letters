@@ -63,6 +63,16 @@ class LettersApplication(SuiteApplication):
         self._add_action('indent', self._on_format)
         self._add_action('outdent', self._on_format)
 
+        # Font size actions
+        self._add_action('increase-font', self._on_format, ['<primary><shift>greater'])
+        self._add_action('decrease-font', self._on_format, ['<primary><shift>less'])
+
+        # Alignment actions
+        self._add_action('align-left', self._on_format, ['<primary>l'])
+        self._add_action('align-center', self._on_format, ['<primary>e'])
+        self._add_action('align-right', self._on_format, ['<primary>r'])
+        self._add_action('align-justify', self._on_format, ['<primary>j'])
+
         # Style actions for narrow toolbar and keyboard shortcuts
         style_tags = {
             'style_p': 'p', 'style_h1': 'h1', 'style_h2': 'h2',
@@ -74,9 +84,21 @@ class LettersApplication(SuiteApplication):
 
         # Add to shortcuts overlay
         self.shortcuts[_('Format')] = [
+            ('<primary>b', _('Bold')),
+            ('<primary>i', _('Italic')),
             ('<primary>u', _('Underline')),
             ('<primary>k', _('Insert Link')),
             ('<primary>t', _('New Tab')),
+        ]
+        self.shortcuts[_('Alignment')] = [
+            ('<primary>l', _('Align Left')),
+            ('<primary>e', _('Align Center')),
+            ('<primary>r', _('Align Right')),
+            ('<primary>j', _('Justify')),
+        ]
+        self.shortcuts[_('Font')] = [
+            ('<primary><shift>greater', _('Increase Font Size')),
+            ('<primary><shift>less', _('Decrease Font Size')),
         ]
 
         self.files = []
@@ -144,6 +166,14 @@ class LettersApplication(SuiteApplication):
             'highlight': "formatting.highlight()",
             'indent': "formatting.indent()",
             'outdent': "formatting.outdent()",
+            # Font size
+            'increase-font': "formatting.increaseFontSize()",
+            'decrease-font': "formatting.decreaseFontSize()",
+            # Alignment
+            'align-left': "formatting.alignLeft()",
+            'align-center': "formatting.alignCenter()",
+            'align-right': "formatting.alignRight()",
+            'align-justify': "formatting.alignJustify()",
         }
         js = js_map.get(name)
         if js:

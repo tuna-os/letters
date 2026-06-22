@@ -99,6 +99,17 @@ class LettersWindow(SuiteWindow):
         self.underline_button.connect('clicked', lambda btn: self.get_application().get_active_window().run_js(None, "formatting.underline()"))
         self.styles_dropdown.connect("notify::selected", lambda dropdown, _: self.get_application().get_active_window().on_style_dropdown_changed(None, dropdown))
 
+        # Word count status bar — added programmatically (Blueprint lacks [bottom] support)
+        self.word_count_label = Gtk.Label(label=_("0 words"))
+        self.word_count_label.set_halign(Gtk.Align.END)
+        self.word_count_label.set_margin_start(6)
+        self.word_count_label.set_margin_end(6)
+        self.word_count_label.add_css_class('caption')
+        status_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        status_box.add_css_class('toolbar')
+        status_box.append(self.word_count_label)
+        self.tbview.add_bottom_bar(status_box)
+
         if not opening_with_files:
             self.new_file()
 
@@ -376,6 +387,33 @@ class LettersWindow(SuiteWindow):
         if not webview: # detect current webview
             webview = self.tabview.get_selected_page().get_child()
         webview.evaluate_javascript(code, -1, None, None, None, None)
+        # Update word count after edit operations
+        GLib.timeout_add(300, self._update_word_count, webview)
+
+    def _update_word_count(self, webview):
+        if not webview or not hasattr(self, 'word_count_label'):
+            return False
+        try:
+            webview.evaluate_javascript(
+                "JSON.stringify(formatting.wordCount())", -1,
+                None, None, None,
+                lambda src, result: self._on_word_count(result),
+                None)
+        except Exception:
+            pass
+        return False
+
+    def _on_word_count(self, result):
+        try:
+            import json
+            js = result.get_js_value()
+            if js and js.to_string():
+                data = json.loads(js.to_string())
+                w = data.get('words', 0)
+                c = data.get('chars', 0)
+                self.word_count_label.set_label(f'{w} words')
+        except Exception:
+            pass
 
     def save(self, action, data = None):
         page = self.tabview.get_selected_page()

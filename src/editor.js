@@ -108,6 +108,30 @@ const formatting = {
   strikethrough: () => { toggleInlineFormat('S'); notifyGTKInlineStyles(); },
   indent: () => { document.execCommand('indent'); },
   outdent: () => { document.execCommand('outdent'); },
+
+  // ── Font size ─────────────────────────────────────────────────
+  increaseFontSize: () => {
+    saveUndoState();
+    document.execCommand('fontSize', false, '5');  // bumps relative
+  },
+  decreaseFontSize: () => {
+    saveUndoState();
+    document.execCommand('fontSize', false, '1');  // decreases relative
+  },
+
+  // ── Text alignment ────────────────────────────────────────────
+  alignLeft: () => { saveUndoState(); document.execCommand('justifyLeft'); },
+  alignCenter: () => { saveUndoState(); document.execCommand('justifyCenter'); },
+  alignRight: () => { saveUndoState(); document.execCommand('justifyRight'); },
+  alignJustify: () => { saveUndoState(); document.execCommand('justifyFull'); },
+
+  // ── Word count ────────────────────────────────────────────────
+  wordCount: () => {
+    const text = editor ? editor.innerText || '' : '';
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    return { words: words, chars: text.length };
+  },
+
   highlight: () => {
     saveUndoState();
     const sel = window.getSelection();
