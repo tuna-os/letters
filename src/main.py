@@ -62,6 +62,8 @@ class LettersApplication(SuiteApplication):
         self._add_action('highlight', self._on_format)
         self._add_action('indent', self._on_format)
         self._add_action('outdent', self._on_format)
+        self._add_action('find', self._on_find, ['<primary>f'])
+        self._add_action('replace', self._on_find, ['<primary>h'])
 
         # Font size actions
         self._add_action('increase-font', self._on_format, ['<primary><shift>greater'])
@@ -72,6 +74,7 @@ class LettersApplication(SuiteApplication):
         self._add_action('align-center', self._on_format, ['<primary>e'])
         self._add_action('align-right', self._on_format, ['<primary>r'])
         self._add_action('align-justify', self._on_format, ['<primary>j'])
+        self._add_action('insert-table', self._on_insert_table)
 
         # Style actions for narrow toolbar and keyboard shortcuts
         style_tags = {
@@ -145,6 +148,17 @@ class LettersApplication(SuiteApplication):
         win = self._win()
         if win and hasattr(win, 'export'):
             win.export(None, None)
+
+
+    def _on_find(self, action, *a):
+        """Ctrl+F: find. Ctrl+H: find & replace."""
+        name = action.get_name()
+        js = 'JSON.stringify(formatting.findText(prompt("Find:","")))' if name == 'find' else              'JSON.stringify(formatting.replaceText(prompt("Find:",""), prompt("Replace with:",""), true))'
+        self._run_js(js)
+
+    def _on_insert_table(self, *a):
+        """Insert an HTML table."""
+        self._run_js('formatting.insertTable(3,3)')
 
     def _on_undo(self, *a):
         self._run_js('undo()')

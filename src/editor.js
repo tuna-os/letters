@@ -651,3 +651,59 @@ function printPage() {
     editor.setAttribute('contenteditable', 'true');
   }, 500);
 }
+  },
+
+  // ── Table insert ──────────────────────────────────────────────
+  insertTable: (rows, cols) => {
+    saveUndoState();
+    rows = rows || 3; cols = cols || 3;
+    let html = '<table style="border-collapse:collapse;width:100%">';
+    for (let r = 0; r < rows; r++) {
+      html += '<tr>';
+      for (let c = 0; c < cols; c++) {
+        html += '<td style="border:1px solid #ccc;padding:4px 8px">&nbsp;</td>';
+      }
+      html += '</tr>';
+    }
+    html += '</table><p>&nbsp;</p>';
+    document.execCommand('insertHTML', false, html);
+  },
+
+  // ── Find & Replace ────────────────────────────────────────────
+  findText: (query) => {
+    if (!editor || !query) return { found: 0 };
+    // Clear previous highlights
+    const marks = editor.querySelectorAll('mark.search-highlight');
+    marks.forEach(m => { const parent = m.parentNode; parent.replaceChild(document.createTextNode(m.textContent), m); });
+    if (!query.trim()) return { found: 0 };
+    // Highlight matches
+    const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    let count = 0;
+    const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (node.parentElement && node.parentElement.closest('mark')) continue;
+      const text = node.textContent;
+      const match = text.match(regex);
+      if (match) {
+        count += match.length;
+        const span = document.createElement('mark');
+        span.className = 'search-highlight';
+        span.style.backgroundColor = '#ffeb3b';
+        span.textContent = text;
+        node.parentNode.replaceChild(span, node);
+      }
+    }
+    return { found: count };
+  },
+
+  replaceText: (query, replacement, replaceAll) => {
+    if (!editor || !query) return { count: 0 };
+    saveUndoState();
+    let count = 0;
+    const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), replaceAll ? 'gi' : 'i');
+    editor.innerHTML = editor.innerHTML.replace(regex, () => { count++; return replacement || ''; });
+    // Reselect editor
+    editor.focus();
+    return { count: count };
+  },
