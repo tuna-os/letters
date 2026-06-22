@@ -22,11 +22,13 @@ gi.require_version('WebKit', '6.0')
 import gi.repository.Gdk as Gdk
 from gi.repository import Gio, Adw, Gtk, WebKit, GLib
 
+from suite_common.window import SuiteWindow
+
 import os, tempfile
 import pypandoc, weasyprint
 
 @Gtk.Template(resource_path='/net/codelogistics/letters/window.ui')
-class LettersWindow(Adw.ApplicationWindow):
+class LettersWindow(SuiteWindow):
     __gtype_name__ = 'LettersWindow'
 
     tbview = Gtk.Template.Child()
@@ -43,13 +45,6 @@ class LettersWindow(Adw.ApplicationWindow):
     styles_dropdown = Gtk.Template.Child()
 
     FORCE_CLOSE = False
-
-    def show_toast(self, message, timeout=3):
-        """Show a non-blocking toast notification."""
-        toast = Adw.Toast.new(message)
-        toast.set_timeout(timeout)
-        if hasattr(self, 'tbview'):
-            self.tbview.add_toast(toast)
 
     def show_error(self, heading, body):
         """Show a modal error dialog."""
@@ -69,8 +64,10 @@ class LettersWindow(Adw.ApplicationWindow):
         if webview:
             webview.set_cursor(cursor)
 
-    def __init__(self, opening_with_files = False, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, opening_with_files=False, **kwargs):
+        super().__init__(app_name='Letters', use_template=True, **kwargs)
+        # Wire up SuiteWindow.toast() to use the template-loaded tbview.
+        self.toast_overlay = self.tbview
 
         # Load GSettings
         app = self.get_application()
@@ -445,7 +442,7 @@ class LettersWindow(Adw.ApplicationWindow):
                     page.set_needs_attention(False)
                     page.set_title(webview.file.get_basename())
                     self.update_title()
-                    self.show_toast(_("Document saved"), 2)
+                    self.toast(_("Document saved"), 2)
                     if page.closing_after_save:
                         self.tabview.close_page_finish(page, True)
                         webview.terminate_web_process()
@@ -502,7 +499,7 @@ class LettersWindow(Adw.ApplicationWindow):
                 font_css = ":root {color-scheme: light dark} body {font-family: \"" + settings.get_property('gtk-font-name').rstrip(' 0123456789') + "\"}"
                 try:
                     weasyprint.HTML(string=content).write_pdf(file.get_path(), stylesheets=[weasyprint.CSS(string=css), weasyprint.CSS(string=font_css)])
-                    self.show_toast(_("PDF exported"), 2)
+                    self.toast(_("PDF exported"), 2)
                 except Exception as e:
                     print("Error exporting file: ", e)
                     self.show_error(_("Error Exporting File"), str(e))
