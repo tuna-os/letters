@@ -1,8 +1,8 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-data/net.codelogistics.letters.desktop.in
-data/net.codelogistics.letters.metainfo.xml.in
-data/net.codelogistics.letters.gschema.xml
+data/io.github.hanthor.letters.desktop.in
+data/io.github.hanthor.letters.metainfo.xml.in
+data/io.github.hanthor.letters.gschema.xml
 src/main.py
 src/window.py
 src/window.blp

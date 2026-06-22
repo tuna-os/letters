@@ -8,7 +8,7 @@ Version: 0.2.0 (forked to https://github.com/hanthor/letters)
 ## 🔴 Critical Issues
 
 ### C1. Flatpak source path is local (`file:///home/satvikp/Projects`)
-**File:** `net.codelogistics.letters.json` line 166
+**File:** `io.github.hanthor.letters.json` line 166
 **Problem:** The Letters module source points to a local filesystem path on the developer's machine. This means the Flatpak manifest cannot build for anyone else.
 **Fix:** Replace with the actual remote URL (Codeberg or GitHub).
 
@@ -30,15 +30,15 @@ icon-name: _("document-new-symbolic");
 ## 🟠 High Priority
 
 ### H1. Developer ID is placeholder
-**File:** `data/net.codelogistics.letters.metainfo.xml.in`
+**File:** `data/io.github.hanthor.letters.metainfo.xml.in`
 ```xml
 <developer id="tld.vendor">
 ```
-**Problem:** `tld.vendor` is a placeholder. Should be `net.codelogistics` to match the app ID.
-**Fix:** Change to `<developer id="net.codelogistics">`.
+**Problem:** `tld.vendor` is a placeholder. Should be `io.github.hanthor` to match the app ID.
+**Fix:** Change to `<developer id="io.github.hanthor">`.
 
 ### H2. Desktop Categories are non-standard
-**File:** `data/net.codelogistics.letters.desktop.in`
+**File:** `data/io.github.hanthor.letters.desktop.in`
 ```
 Categories=X-Accessories;X-Office;
 ```
@@ -46,16 +46,16 @@ Categories=X-Accessories;X-Office;
 **Fix:** Change to `Categories=Office;WordProcessor;`.
 
 ### H3. Desktop Keywords include `GTK` — not useful
-**File:** `data/net.codelogistics.letters.desktop.in`
+**File:** `data/io.github.hanthor.letters.desktop.in`
 ```
 Keywords=GTK;
 ```
 **Fix:** Use meaningful keywords: `Keywords=word;processor;document;editor;text;pandoc;`.
 
 ### H4. GSettings schema is completely empty
-**File:** `data/net.codelogistics.letters.gschema.xml`
+**File:** `data/io.github.hanthor.letters.gschema.xml`
 ```xml
-<schema id="net.codelogistics.letters" path="/net/codelogistics/letters/">
+<schema id="io.github.hanthor.letters" path="/net/hanthor/letters/">
 </schema>
 ```
 **Fix:** Add keys for font, editor width, zoom level, autosave interval, etc.
@@ -65,7 +65,7 @@ Keywords=GTK;
 **Fix:** Wire up a real `Adw.PreferencesWindow`.
 
 ### H6. No `--filesystem` access for fonts or documents
-**File:** `net.codelogistics.letters.json` finish-args
+**File:** `io.github.hanthor.letters.json` finish-args
 **Problem:** The sandbox doesn't grant access to the user's fonts or document directories. Loading/saving files will be limited to portals. Font detection relies on system fonts only.
 **Fix:** Add appropriate `--filesystem=host` or portal-based access.
 
@@ -74,12 +74,12 @@ Keywords=GTK;
 ## 🟡 Medium Priority
 
 ### M1. Release metadata is outdated
-**File:** `data/net.codelogistics.letters.metainfo.xml.in`
+**File:** `data/io.github.hanthor.letters.metainfo.xml.in`
 **Problem:** Only two release entries (0.1.0, 0.2.0) with dates in 2025. No entry for current build.
 **Fix:** Add current release tag entry.
 
 ### M2. Missing metainfo URLs
-**File:** `data/net.codelogistics.letters.metainfo.xml.in`
+**File:** `data/io.github.hanthor.letters.metainfo.xml.in`
 **Problem:** Missing `<url type="help">`, `<url type="donation">`, `<url type="translate">`. All are commented out.
 **Fix:** Add URLs where applicable, remove unused comment boilerplate.
 
@@ -115,7 +115,7 @@ Keywords=GTK;
 **Fix:** Use a context manager (`with tempfile.NamedTemporaryFile() as f:`) or explicit cleanup in finally blocks.
 
 ### L3. MIME type metadata in Flatpak
-**File:** `net.codelogistics.letters.json`
+**File:** `io.github.hanthor.letters.json`
 ```
 --metadata=X-Flatpak-MimeType=text/plain;application/json;image/png;
 ```

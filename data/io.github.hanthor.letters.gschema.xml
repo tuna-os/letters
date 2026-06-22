@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="letters">
-  <schema id="net.codelogistics.letters" path="/net/codelogistics/letters/">
+  <schema id="io.github.hanthor.letters" path="/net/hanthor/letters/">
     <key name="font" type="s">
       <default>""</default>
       <summary>Default font family</summary>

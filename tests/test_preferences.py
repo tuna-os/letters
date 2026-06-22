@@ -184,7 +184,7 @@ class TestStyleMapping:
 # ---- GSettings Schema Validation ----
 
 class TestGSettingsSchema:
-    SCHEMA_PATH = "data/net.codelogistics.letters.gschema.xml"
+    SCHEMA_PATH = "data/io.github.hanthor.letters.gschema.xml"
 
     def test_schema_exists(self):
         import os
@@ -200,7 +200,7 @@ class TestGSettingsSchema:
         ns = {'': 'http://www.gtk.org/schemas'}
         schema = root.find('schema') or root.find('{http://www.gtk.org/schemas}schema')
         assert schema is not None
-        assert schema.get('id') == 'net.codelogistics.letters'
+        assert schema.get('id') == 'io.github.hanthor.letters'
 
     def test_schema_has_required_keys(self):
         tree = ET.parse(self.SCHEMA_PATH)
@@ -287,7 +287,7 @@ class TestGSettingsSchema:
 # ---- Desktop File Validation ----
 
 class TestDesktopFile:
-    DESKTOP_PATH = "data/net.codelogistics.letters.desktop.in"
+    DESKTOP_PATH = "data/io.github.hanthor.letters.desktop.in"
 
     def test_desktop_file_exists(self):
         import os
@@ -330,7 +330,7 @@ class TestDesktopFile:
 # ---- Metainfo Validation ----
 
 class TestMetainfo:
-    METAINFO_PATH = "data/net.codelogistics.letters.metainfo.xml.in"
+    METAINFO_PATH = "data/io.github.hanthor.letters.metainfo.xml.in"
 
     def test_metainfo_exists(self):
         import os
@@ -339,7 +339,7 @@ class TestMetainfo:
     def test_developer_id_is_proper(self):
         with open(self.METAINFO_PATH) as f:
             content = f.read()
-        assert '<developer id="net.codelogistics">' in content
+        assert '<developer id="io.github.hanthor">' in content
         assert 'tld.vendor' not in content
 
     def test_has_release_info(self):

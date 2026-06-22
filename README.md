@@ -1,6 +1,6 @@
 # Letters
 
-![Letters logo](data/icons/hicolor/scalable/apps/net.codelogistics.letters.svg)
+![Letters logo](data/icons/hicolor/scalable/apps/io.github.hanthor.letters.svg)
 
 [![Please do not theme this app](https://stopthemingmy.app/badge.svg)](https://stopthemingmy.app)
 
@@ -22,13 +22,13 @@ It can also export your documents to PDF using [weasyprint](https://weasyprint.o
 
 ## Install
 
-[![Get it on Flathub](https://flathub.org/api/badge?locale=en)](https://flathub.org/apps/net.codelogistics.letters/)
+[![Get it on Flathub](https://flathub.org/api/badge?locale=en)](https://flathub.org/apps/io.github.hanthor.letters/)
 
 Or from the TunaOS Flatpak remote:
 
 ```bash
 flatpak remote-add tuna-os oci+https://tuna-os.github.io/flatpak-index
-flatpak install tuna-os net.codelogistics.letters
+flatpak install tuna-os io.github.hanthor.letters
 ```
 
 ## Building

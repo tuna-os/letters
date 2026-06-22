@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>net.codelogistics.letters</id>
+  <id>io.github.hanthor.letters</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
 
@@ -12,7 +12,7 @@
       It can also export your documents as a PDF file.</p>
   </description>
 
-  <developer id="net.codelogistics">
+  <developer id="io.github.hanthor">
     <name>Satvik Patwardhan</name>
   </developer>
 
@@ -30,7 +30,7 @@
   <translation type="gettext">letters</translation>
   <!-- All graphical applications having a desktop file must have this tag in the MetaInfo.
      If this is present, appstreamcli compose will pull icons, keywords and categories from the desktop file. -->
-  <launchable type="desktop-id">net.codelogistics.letters.desktop</launchable>
+  <launchable type="desktop-id">io.github.hanthor.letters.desktop</launchable>
   <!-- Use the OARS website (https://hughsie.github.io/oars/generate.html) to generate these and make sure to use oars-1.1 -->
   <content_rating type="oars-1.1" />
 

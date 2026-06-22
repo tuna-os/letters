@@ -40,13 +40,13 @@ class LettersApplication(SuiteApplication):
     """
 
     def __init__(self):
-        super().__init__(application_id='net.codelogistics.letters',
+        super().__init__(application_id='io.github.hanthor.letters',
                          window_class=LettersWindow,
                          app_name='Letters',
                          version='0.2.0')
 
         # Load GSettings (Letters-specific, not in suite-common yet)
-        self.settings = Gio.Settings(schema_id='net.codelogistics.letters')
+        self.settings = Gio.Settings(schema_id='io.github.hanthor.letters')
 
         # ── Letters-specific shortcuts ──────────────────────────────
         self._add_action('new-tab', self._on_new_tab, ['<primary>t'])

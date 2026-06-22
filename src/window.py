@@ -27,7 +27,7 @@ from suite_common.window import SuiteWindow
 import os, tempfile
 import pypandoc, weasyprint
 
-@Gtk.Template(resource_path='/net/codelogistics/letters/window.ui')
+@Gtk.Template(resource_path='/net/hanthor/letters/window.ui')
 class LettersWindow(SuiteWindow):
     __gtype_name__ = 'LettersWindow'
 

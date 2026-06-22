@@ -20,21 +20,21 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 49.0\n"
 
-#: data/net.codelogistics.letters.desktop.in:2
-#: data/net.codelogistics.letters.metainfo.xml.in:7 src/main.py:83
+#: data/io.github.hanthor.letters.desktop.in:2
+#: data/io.github.hanthor.letters.metainfo.xml.in:7 src/main.py:83
 #: src/window.py:233 src/window.blp:9
 msgid "Letters"
 msgstr "Litery"
 
-#: data/net.codelogistics.letters.desktop.in:8
+#: data/io.github.hanthor.letters.desktop.in:8
 msgid "GTK;"
 msgstr "GTK;"
 
-#: data/net.codelogistics.letters.metainfo.xml.in:8
+#: data/io.github.hanthor.letters.metainfo.xml.in:8
 msgid "Word processor for GNOME"
 msgstr "Procesor tekstu dla GNOME"
 
-#: data/net.codelogistics.letters.metainfo.xml.in:10
+#: data/io.github.hanthor.letters.metainfo.xml.in:10
 msgid ""
 "Letters is a modern, minimalist word processor for the GNOME desktop, with "
 "support for reading and writing DOCX, ODT, MD and HTML files. It can also "
@@ -44,11 +44,11 @@ msgstr ""
 "wsparciem dla czytania i zapisywania plików DOCX, ODT, MD i HTML. Może także "
 "wyeksportować twoje dokumenty do pliku PDF."
 
-#: data/net.codelogistics.letters.metainfo.xml.in:16
+#: data/io.github.hanthor.letters.metainfo.xml.in:16
 msgid "Satvik Patwardhan"
 msgstr "Satvik Patwardhan"
 
-#: data/net.codelogistics.letters.metainfo.xml.in:53
+#: data/io.github.hanthor.letters.metainfo.xml.in:53
 msgid "Screenshot of Letters"
 msgstr "Zrzut ekranu Liter"
 

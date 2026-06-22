@@ -25,7 +25,7 @@ from gi.repository import Gtk, Adw, Gio, GLib
 
 FORMAT_MAP = ["odt", "docx", "md", "html", "txt", "rtf"]
 
-@Gtk.Template(resource_path='/net/codelogistics/letters/preferences.ui')
+@Gtk.Template(resource_path='/net/hanthor/letters/preferences.ui')
 class LettersPreferencesWindow(Adw.PreferencesWindow):
     __gtype_name__ = 'LettersPreferencesWindow'
 

@@ -130,9 +130,9 @@ jobs:
         run: |
           python3 -c "
           import json
-          with open('net.codelogistics.letters.json') as f:
+          with open('io.github.hanthor.letters.json') as f:
               data = json.load(f)
-          assert data['id'] == 'net.codelogistics.letters'
+          assert data['id'] == 'io.github.hanthor.letters'
           assert data['runtime'] == 'org.gnome.Platform'
           assert data['runtime-version'] == '50'
           modules = [m['name'] for m in data['modules']]
@@ -155,7 +155,7 @@ jobs:
         run: |
           python3 -c "
           import xml.etree.ElementTree as ET
-          tree = ET.parse('data/net.codelogistics.letters.gschema.xml')
+          tree = ET.parse('data/io.github.hanthor.letters.gschema.xml')
           root = tree.getroot()
           schema = root.find('{http://www.gtk.org/schemas}schema') or root.find('schema')
           assert schema is not None, 'No schema element found'
@@ -179,7 +179,7 @@ jobs:
       - name: Validate desktop file
         run: |
           python3 -c "
-          with open('data/net.codelogistics.letters.desktop.in') as f:
+          with open('data/io.github.hanthor.letters.desktop.in') as f:
               content = f.read()
           assert 'Categories=Office;WordProcessor;' in content, 'Wrong categories'
           assert 'Keywords=word;processor;document;editor;text;pandoc;' in content, 'Wrong keywords'
@@ -190,10 +190,10 @@ jobs:
       - name: Validate AppStream metainfo
         run: |
           python3 -c "
-          with open('data/net.codelogistics.letters.metainfo.xml.in') as f:
+          with open('data/io.github.hanthor.letters.metainfo.xml.in') as f:
               content = f.read()
-          assert 'net.codelogistics' in content
-          assert 'developer id=\"net.codelogistics\"' in content or '<developer id=\"net.codelogistics\">' in content
+          assert 'io.github.hanthor' in content
+          assert 'developer id=\"io.github.hanthor\"' in content or '<developer id=\"io.github.hanthor\">' in content
           print('Metainfo looks good')
           "
 
