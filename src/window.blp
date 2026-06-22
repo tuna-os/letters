@@ -70,7 +70,7 @@ template $LettersWindow: Adw.ApplicationWindow {
         halign: center;
 
         ToggleButton bold_button {
-          icon-name: "text-bold-symbolic";
+          icon-name: "format-text-bold-symbolic";
           tooltip-text: _("Bold");
           accessibility {
             label: _("Bold");
@@ -78,7 +78,7 @@ template $LettersWindow: Adw.ApplicationWindow {
         }
 
         ToggleButton italic_button {
-          icon-name: "text-italic-symbolic";
+          icon-name: "format-text-italic-symbolic";
           tooltip-text: _("Italic");
           accessibility {
             label: _("Italic");
@@ -86,7 +86,7 @@ template $LettersWindow: Adw.ApplicationWindow {
         }
 
         ToggleButton underline_button {
-          icon-name: "text-underline-symbolic";
+          icon-name: "format-text-underline-symbolic";
           tooltip-text: _("Underline");
           accessibility {
             label: _("Underline");
@@ -154,13 +154,13 @@ template $LettersWindow: Adw.ApplicationWindow {
           Separator {}
 
           Button {
-            icon-name: "font-size-increase-symbolic";
+            icon-name: "zoom-in-symbolic";
             action-name: "app.increase-font";
             tooltip-text: _("Increase Font Size");
             accessibility { label: _("Increase Font Size"); }
           }
           Button {
-            icon-name: "font-size-decrease-symbolic";
+            icon-name: "zoom-out-symbolic";
             action-name: "app.decrease-font";
             tooltip-text: _("Decrease Font Size");
             accessibility { label: _("Decrease Font Size"); }
