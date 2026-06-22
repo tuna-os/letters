@@ -5,13 +5,14 @@ use gtk4 as gtk;
 use gtk::prelude::*;
 
 mod window;
+mod engine;
+mod export;
 
 fn main() {
-    let app = libadwaita::Application::new(Some("org.tunaos.letters"), Default::default());
+    let app = libadwaita::Application::new(Some("org.tunaos.letters"));
     app.connect_activate(|app| {
         let win = window::LettersWindow::new(app);
         win.present();
     });
     app.run();
 }
-pub mod export;
