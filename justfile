@@ -53,3 +53,8 @@ verify: build
 
 clean:
     rm -rf subprojects/suite-common "$HOME/.cache/letters-flatpak"
+
+# Lint Python source files.
+lint:
+    python3 -m py_compile src/main.py
+    python3 -m py_compile src/window.py
