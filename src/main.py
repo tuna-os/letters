@@ -18,74 +18,158 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import sys
+import os
 import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Gio, Adw, GLib
+from gi.repository import Gio, Adw
+from suite_common.application import SuiteApplication
+
 from .window import LettersWindow
 from .preferences import LettersPreferencesWindow
-import os, sys
 
-class LettersApplication(Adw.Application):
-    """The main application singleton class."""
+
+class LettersApplication(SuiteApplication):
+    """The main application singleton class.
+
+    Migrated to SuiteApplication for shared actions (open, save, undo, redo,
+    print, quit, about, preferences, shortcuts) and consistent keyboard
+    shortcuts across the suite.
+    """
 
     def __init__(self):
         super().__init__(application_id='net.codelogistics.letters',
-                         flags=Gio.ApplicationFlags.HANDLES_OPEN,
-                         resource_base_path='/net/codelogistics/letters')
+                         window_class=LettersWindow,
+                         app_name='Letters',
+                         version='0.2.0')
 
-        # Load GSettings
+        # Load GSettings (Letters-specific, not in suite-common yet)
         self.settings = Gio.Settings(schema_id='net.codelogistics.letters')
 
-        self.create_action('quit', self.close_windows, ['<primary>q'])
-        self.create_action('about', self.on_about_action)
-        self.create_action('preferences', self.on_preferences_action, ['<ctrl>comma'])
+        # ── Letters-specific shortcuts ──────────────────────────────
+        self._add_action('new-tab', self._on_new_tab, ['<primary>t'])
 
-        self.create_action("new_window", lambda x,y: self.get_active_window().create_window(), ["<ctrl>n"])
-        self.create_action("new", lambda x, y: self.get_active_window().new_file(None), ["<ctrl>t"])
-        self.create_action("close", lambda x, y: self.get_active_window().close_page(x,y), ["<ctrl>w"])
-        self.create_action("open", lambda x, y: self.get_active_window().open(x,y), ["<ctrl>o"])
-        self.create_action("save", lambda x, y: self.get_active_window().save(x,y), ["<ctrl>s"])
-        self.create_action("save_as", lambda x, y: self.get_active_window().save_as(x,y), ["<ctrl><shift>s"])
-        self.create_action("print", lambda x, y: self.get_active_window().print(x,y), ["<ctrl>p"])
-        self.create_action("export", lambda x, y: self.get_active_window().export(x,y))
-        self.create_action("undo", lambda x, y: self.get_active_window().run_js(None, "undo()"), ["<ctrl>z"])
-        self.create_action("redo", lambda x, y: self.get_active_window().run_js(None, "redo()"), ["<ctrl>y"])
-        self.create_action("underline", lambda x, y: self.get_active_window().run_js(None, "formatting.underline()"), ["<ctrl>u"])
-        self.create_action("insertlink", lambda x, y: self.get_active_window().run_js(None, "formatting.createLink()"), ["<ctrl>k"])
-        self.create_action("insertimage", lambda x, y: self.get_active_window().run_js(None, "insertImage()"))
-        self.create_action("insertlist", lambda x, y: self.get_active_window().run_js(None, "document.execCommand('insertUnorderedList')"))
+        # Formatting shortcuts
+        self._add_action('underline', self._on_format, ['<primary>u'])
+        self._add_action('insertlink', self._on_format, ['<primary>k'])
 
-        self.create_action("strikethrough", lambda x, y: self.get_active_window().run_js(None, "formatting.strikethrough()"))
-        self.create_action("highlight", lambda x, y: self.get_active_window().run_js(None, "formatting.highlight()"))
-        self.create_action("indent", lambda x, y: self.get_active_window().run_js(None, "formatting.indent()"))
-        self.create_action("outdent", lambda x, y: self.get_active_window().run_js(None, "formatting.outdent()"))
+        # Actions without default shortcuts (toolbar-only)
+        self._add_action('insertimage', self._on_format)
+        self._add_action('insertlist', self._on_format)
+        self._add_action('strikethrough', self._on_format)
+        self._add_action('highlight', self._on_format)
+        self._add_action('indent', self._on_format)
+        self._add_action('outdent', self._on_format)
 
         # Style actions for narrow toolbar and keyboard shortcuts
-        style_tags = {'style_p': 'p', 'style_h1': 'h1', 'style_h2': 'h2', 'style_h3': 'h3',
-                      'style_h4': 'h4', 'style_h5': 'h5', 'style_h6': 'h6',
-                      'style_code': 'pre', 'style_quote': 'blockquote'}
+        style_tags = {
+            'style_p': 'p', 'style_h1': 'h1', 'style_h2': 'h2',
+            'style_h3': 'h3', 'style_h4': 'h4', 'style_h5': 'h5',
+            'style_h6': 'h6', 'style_code': 'pre', 'style_quote': 'blockquote',
+        }
         for action_name, tag in style_tags.items():
-            self.create_action(action_name,
-                lambda x, y, t=tag: self.get_active_window().run_js(None, f"applyStyle('{t}')"))
+            self._add_action(action_name, lambda a, p, t=tag: self._run_js(f"applyStyle('{t}')"))
 
-        self.create_action("shortcuts", self.on_shortcuts_action)
+        # Add to shortcuts overlay
+        self.shortcuts[_('Format')] = [
+            ('<primary>u', _('Underline')),
+            ('<primary>k', _('Insert Link')),
+            ('<primary>t', _('New Tab')),
+        ]
 
         self.files = []
-        self.connect("open", self.open_files)
+        self.connect('open', self._open_files)
+
+    # ── Override suite-common actions with Letters-specific behaviour ──
+
+    def _on_new(self, *a):
+        """Ctrl+N: open a new window."""
+        self.activate()
+
+    def _on_new_tab(self, *a):
+        """Ctrl+T: new tab in the current window."""
+        win = self._win()
+        if win and hasattr(win, 'new_file'):
+            win.new_file()
+
+    def _on_close(self, *a):
+        """Ctrl+W: close the current page (or window if one page left)."""
+        win = self._win()
+        if win and hasattr(win, 'close_page'):
+            win.close_page(None, None)
+
+    def _on_open(self, *a):
+        """Ctrl+O: open a file dialog."""
+        win = self._win()
+        if win and hasattr(win, 'open'):
+            win.open(None, None)
+
+    def _on_save(self, *a):
+        """Ctrl+S: save the current page."""
+        win = self._win()
+        if win and hasattr(win, 'save'):
+            win.save(None, None)
+
+    def _on_save_as(self, *a):
+        """Ctrl+Shift+S: save as a new file."""
+        win = self._win()
+        if win and hasattr(win, 'save_as'):
+            win.save_as(None, None)
+
+    def _on_print(self, *a):
+        """Ctrl+P: export the current page."""
+        win = self._win()
+        if win and hasattr(win, 'export'):
+            win.export(None, None)
+
+    def _on_undo(self, *a):
+        self._run_js('undo()')
+
+    def _on_redo(self, *a):
+        self._run_js('redo()')
+
+    # ── Letters-specific format actions ─────────────────────────────
+
+    def _on_format(self, action, param=None):
+        """Dispatch a formatting action to the active window's editor."""
+        name = action.get_name()
+        js_map = {
+            'underline': "formatting.underline()",
+            'insertlink': "formatting.createLink()",
+            'insertimage': "insertImage()",
+            'insertlist': "document.execCommand('insertUnorderedList')",
+            'strikethrough': "formatting.strikethrough()",
+            'highlight': "formatting.highlight()",
+            'indent': "formatting.indent()",
+            'outdent': "formatting.outdent()",
+        }
+        js = js_map.get(name)
+        if js:
+            self._run_js(js)
+
+    def _run_js(self, js):
+        """Run JavaScript in the active window's focused webview."""
+        win = self._win()
+        if win and hasattr(win, 'run_js'):
+            win.run_js(None, js)
+
+    # ── Preferences ─────────────────────────────────────────────────
+
+    def _on_preferences(self, *args):
+        """Override to use LettersPreferencesWindow with settings."""
+        win = LettersPreferencesWindow(settings=self.settings)
+        win.set_transient_for(self.props.active_window)
+        win.present()
+
+    # ── Lifecycle ───────────────────────────────────────────────────
 
     def do_activate(self):
-        """Called when the application is activated.
-
-        We raise the application's main window, creating it if
-        necessary.
-        """
         win = self.props.active_window
         if not win:
             if self.files:
-                win = LettersWindow(application=self, opening_with_files = True)
+                win = LettersWindow(application=self, opening_with_files=True)
             else:
                 win = LettersWindow(application=self)
         win.present()
@@ -93,59 +177,10 @@ class LettersApplication(Adw.Application):
             win.open_files(self.files)
             del self.files
 
-    def on_about_action(self, *args):
-        """Callback for the app.about action."""
-        about = Adw.AboutDialog(application_name=_('Letters'),
-                                application_icon='net.codelogistics.letters',
-                                developer_name='Satvik Patwardhan',
-                                version='0.2.0',
-                                developers=['Satvik Patwardhan'],
-                                artists=["Jakub Steiner"],
-                                copyright='© 2025 Satvik Patwardhan',
-                                license_type=Gtk.License.GPL_3_0,
-                                issue_url="https://codeberg.org/eyekay/letters/issues",
-                                website="https://codeberg.org/eyekay/letters")
-        # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
-        about.set_translator_credits(_('translator-credits'))
-        about.present(self.props.active_window)
-
-    def on_preferences_action(self, widget, _):
-        """Callback for the app.preferences action."""
-        win = LettersPreferencesWindow(settings=self.settings)
-        win.set_transient_for(self.props.active_window)
-        win.present()
-
-    def on_shortcuts_action(self, widget, _):
-        """Callback for the app.shortcuts action."""
-        from gi.repository import Adw
-        shortcuts = Adw.ShortcutsDialog.new()
-        # The dialog is loaded from the GResource via its UI file
-        # which is included in the compiled resources
-        shortcuts.set_transient_for(self.props.active_window)
-        shortcuts.present()
-
-    def create_action(self, name, callback, shortcuts=None):
-        """Add an application action.
-
-        Args:
-            name: the name of the action
-            callback: the function to be called when the action is
-              activated
-            shortcuts: an optional list of accelerators
-        """
-        action = Gio.SimpleAction.new(name, None)
-        action.connect("activate", callback)
-        self.add_action(action)
-        if shortcuts:
-            self.set_accels_for_action(f"app.{name}", shortcuts)
-
-    def open_files(self, application, files, n_files, hint, data = None):
+    def _open_files(self, application, files, n_files, hint, data=None):
         self.files = files
         self.activate()
 
-    def close_windows(self, action, data = None):
-        for i in self.get_windows():
-            i.close()
 
 def main(version):
     """The application's entry point."""

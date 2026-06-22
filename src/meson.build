@@ -2,6 +2,12 @@ pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
 moduledir = pkgdatadir / 'letters'
 gnome = import('gnome')
 
+# Shared scaffold — consumed as a meson subproject, installed next to the
+# app package so both import from pkgdatadir (which the launcher puts on sys.path).
+suite_common = subproject('suite-common')
+sc_sources = suite_common.get_variable('suite_common_sources')
+install_data(sc_sources, install_dir: pkgdatadir / 'suite_common')
+
 blueprints = custom_target('blueprints',
   input: files(
     'window.blp',
