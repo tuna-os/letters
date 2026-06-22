@@ -2,7 +2,7 @@
 
 ![Letters logo](data/icons/hicolor/scalable/apps/net.codelogistics.letters.svg)
 
-[![Please do not theme this app](https://stopthemingmy.app/badge.svg)](https://stopthemingmy.app) 
+[![Please do not theme this app](https://stopthemingmy.app/badge.svg)](https://stopthemingmy.app)
 
 ### Modern word processor for the GNOME desktop
 
@@ -10,20 +10,50 @@ Letters is a modern, minimalist word processor for the GNOME desktop, with suppo
 
 It can also export your documents to PDF using [weasyprint](https://weasyprint.org/).
 
+> **This is a hard fork** of [Letters by Satvik Patwardhan](https://codeberg.org/eyekay/letters),
+> maintained as part of the [TunaOS](https://github.com/tuna-os) GNOME office suite alongside
+> [Tables](https://github.com/hanthor/tables) and [Decks](https://github.com/hanthor/decks).
+> All credit for the original Letters architecture, design, and implementation goes to
+> **Satvik Patwardhan** and contributors.
+> 
+> This fork extends the original by adopting the [suite-common](https://github.com/hanthor/suite-common)
+> shared scaffold, adding keyboard shortcuts, formatting toolbar extensions, find/replace, word count,
+> table insertion, and comprehensive test infrastructure.
+
+## Install
+
 [![Get it on Flathub](https://flathub.org/api/badge?locale=en)](https://flathub.org/apps/net.codelogistics.letters/)
+
+Or from the TunaOS Flatpak remote:
+
+```bash
+flatpak remote-add tuna-os oci+https://tuna-os.github.io/flatpak-index
+flatpak install tuna-os net.codelogistics.letters
+```
 
 ## Building
 
-You can build Letters by cloning this repository into GNOME Builder (either the Flatpak or the version shipped with your distro), which will handle all dependencies and build the Flatpak.
+```bash
+git clone https://github.com/hanthor/letters.git
+cd letters
+just setup   # clones suite-common subproject
+just build   # builds & installs Flatpak
+just run     # launches the app
+```
 
-## Code of Conduct
+## Test
 
-Letters uses the [GNOME Code of Conduct](https://conduct.gnome.org/).
+```bash
+just lint         # syntax check
+pytest tests/     # 81 unit tests
+```
 
 ## License
 
-This program is licensed under the GNU General Public License, version 3.0 or later.
+GPL-3.0-or-later.
 
 ## Credits
 
-Made with Gtk 4, WebKitGTK, libadwaita, pypandoc, blueprint, weasyprint and Flatpak.
+**Original author:** [Satvik Patwardhan](https://codeberg.org/eyekay) — the original Letters word processor, its architecture, design, and implementation.
+
+Built with GTK 4, WebKitGTK, libadwaita, pypandoc, blueprint-compiler, weasyprint, and Flatpak.
