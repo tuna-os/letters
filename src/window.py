@@ -397,7 +397,7 @@ class LettersWindow(SuiteWindow):
             webview.evaluate_javascript(
                 "JSON.stringify(formatting.wordCount())", -1,
                 None, None, None,
-                lambda src, result: self._on_word_count(result),
+                lambda src, result, *a: self._on_word_count(result),
                 None)
         except Exception:
             pass
