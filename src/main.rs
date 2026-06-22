@@ -1,17 +1,12 @@
-// main.rs — Letters word processor, pure Rust + gtk4-rs.
-// SPDX-License-Identifier: GPL-3.0-or-later
-
-use gtk4 as gtk;
-use gtk::prelude::*;
-
-mod window;
-mod engine;
-mod export;
-
+use gtk4::prelude::*;
 fn main() {
-    let app = libadwaita::Application::new(Some("org.tunaos.letters"));
+    let app = gtk4::Application::new(Some("org.tunaos.letters"), Default::default());
     app.connect_activate(|app| {
-        let win = window::LettersWindow::new(app);
+        let win = gtk4::ApplicationWindow::new(app);
+        win.set_title(Some("Letters"));
+        win.set_default_size(800, 600);
+        let label = gtk4::Label::new(Some("📄 Letters — Rust native"));
+        win.set_child(Some(&label));
         win.present();
     });
     app.run();
