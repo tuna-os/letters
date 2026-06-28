@@ -1,5 +1,15 @@
 # Letters
 
+> ⚠️ **DEPRECATED — Superseded by the Rust rewrite.**
+>
+> This Python version is in **bugfix-only maintenance**. New feature development
+> has moved to the [gtk-office-suite](https://github.com/tuna-os/gtk-office-suite)
+> monorepo (`letters` crate). The Rust version is already distributed via Flatpak
+> as `org.tunaos.letters-rust`.
+>
+> See [gtk-office-suite#82](https://github.com/tuna-os/gtk-office-suite/issues/82)
+> for the migration plan.
+
 ![Letters logo](data/icons/hicolor/scalable/apps/org.tunaos.letters.svg)
 
 [![Please do not theme this app](https://stopthemingmy.app/badge.svg)](https://stopthemingmy.app)
