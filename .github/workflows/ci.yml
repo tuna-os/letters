@@ -87,7 +87,7 @@ jobs:
 
       - name: Run Python unit tests
         run: |
-          python -m pytest tests/test_preferences.py -v --cov=tests --cov-report=term-missing --cov-report=lcov
+          python -m pytest tests/ -v --cov=tests --cov-report=term-missing --cov-report=lcov
         continue-on-error: true
 
       - name: Upload Python coverage
