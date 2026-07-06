@@ -23,6 +23,7 @@ import gi.repository.Gdk as Gdk
 from gi.repository import Gio, Adw, Gtk, WebKit, GLib
 
 from suite_common.window import SuiteWindow
+from gettext import gettext as _
 
 import os, tempfile
 import pypandoc, weasyprint
