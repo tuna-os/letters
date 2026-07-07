@@ -651,10 +651,8 @@ function printPage() {
     editor.setAttribute('contenteditable', 'true');
   }, 500);
 }
-  },
 
-  // ── Table insert ──────────────────────────────────────────────
-  insertTable: (rows, cols) => {
+function insertTable(rows, cols) {
     saveUndoState();
     rows = rows || 3; cols = cols || 3;
     let html = '<table style="border-collapse:collapse;width:100%">';
@@ -667,10 +665,10 @@ function printPage() {
     }
     html += '</table><p>&nbsp;</p>';
     document.execCommand('insertHTML', false, html);
-  },
+  }
 
   // ── Find & Replace ────────────────────────────────────────────
-  findText: (query) => {
+  function findText(query) {
     if (!editor || !query) return { found: 0 };
     // Clear previous highlights
     const marks = editor.querySelectorAll('mark.search-highlight');
@@ -695,9 +693,9 @@ function printPage() {
       }
     }
     return { found: count };
-  },
+  }
 
-  replaceText: (query, replacement, replaceAll) => {
+  function replaceText(query, replacement, replaceAll) {
     if (!editor || !query) return { count: 0 };
     saveUndoState();
     let count = 0;
@@ -706,4 +704,4 @@ function printPage() {
     // Reselect editor
     editor.focus();
     return { count: count };
-  },
+  }
