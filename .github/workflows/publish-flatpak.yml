@@ -53,10 +53,10 @@ jobs:
       - name: Push OCI to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | skopeo login ghcr.io -u "${{ github.actor }}" --password-stdin
-          skopeo copy oci:letters.oci docker://ghcr.io/hanthor/letters:latest
+          skopeo copy oci:letters.oci docker://ghcr.io/tuna-os/letters:latest
           TAG="${{ github.ref_name }}"
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-            skopeo copy oci:letters.oci docker://ghcr.io/hanthor/letters:${TAG}
+            skopeo copy oci:letters.oci docker://ghcr.io/tuna-os/letters:${TAG}
           fi
       - name: Update central index (tuna-os/docs)
         run: |
