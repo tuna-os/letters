@@ -1,5 +1,5 @@
 project('letters',
-          version: '0.2.9',
+          version: '0.2.10',
     meson_version: '>= 1.0.0',
   default_options: [ 'warning_level=2', 'werror=false', ],
 )
