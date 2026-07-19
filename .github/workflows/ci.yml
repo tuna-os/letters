@@ -201,4 +201,4 @@ jobs:
       - name: Check README
         run: |
           test -f README.md && echo 'README.md exists'
-          test -f COPYING && echo 'COPYING (license) exists'
+          test -f LICENSE && echo 'LICENSE exists'
